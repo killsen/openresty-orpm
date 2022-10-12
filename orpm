@@ -1,0 +1,7 @@
+#!/bin/sh
+SCRIPT_ROOT=`dirname $0`
+if command -v pwsh.exe > /dev/null 2>&1; then
+    pwsh.exe -noprofile -ex unrestricted -file "$SCRIPT_ROOT/orpm.ps1"  $@
+else
+    powershell.exe -noprofile -ex unrestricted -file "$SCRIPT_ROOT/orpm.ps1"  $@
+fi
