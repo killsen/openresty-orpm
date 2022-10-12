@@ -1,4 +1,4 @@
-
+﻿
 # 获取根目录
 function get_root_path() {
     $path = Get-Location

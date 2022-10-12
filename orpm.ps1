@@ -1,4 +1,4 @@
-
+﻿
 $cmd = $args[0]
 
 if ($cmd -eq "start") {
