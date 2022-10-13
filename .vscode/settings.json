@@ -6,5 +6,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/tmp": true
+    },
+    "files.associations": {
+        ".openrestyrc": "json"
     }
 }
