@@ -28,8 +28,6 @@ $app_name           = $conf.app_name
 $openresty_ver      = $conf.openresty_ver
 
 if (-not $openresty_ver) {
-    $ProgressPreference = 'SilentlyContinue'
-
     $down = "https://openresty.org/download"
     $link = (Invoke-WebRequest -Uri "$down").Links |
         Where-Object {$_.href -like "$down/openresty-*-win32.zip"}
