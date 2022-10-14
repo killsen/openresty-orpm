@@ -58,17 +58,9 @@ if ( -not (Test-Path $nginx_exe) ) {
     $url  = "https://openresty.org/download/$openresty_win32.zip"
     $file = "$openresty/$openresty_win32.zip"
 
-    try {
-        wget.exe "$url" -O "$file"                                      # wget下载
-    } catch {
-        Invoke-WebRequest -Uri $url -OutFile $file                      # 下载文件
-    }
-
-    try {
-        7z.exe x "$file" -o"$openresty" -y -aoa  | Out-Null              # 7zip解压
-    } catch {
-        Expand-Archive -Path $file -DestinationPath $openresty -Force    # 解压文件
-    }
+    # 下载文件并解压
+    $ok = download_expand $url $file $openresty $false
+    if (-not $ok) { return }
 }
 
 make_path $nginx

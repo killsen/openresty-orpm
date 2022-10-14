@@ -35,3 +35,34 @@ function make_link($path, $link) {
     }
     New-Item -Path $path -ItemType Junction -Value $link | Out-Null
 }
+
+# 下载并解压
+function download_expand($url, $file, $path, $remove) {
+
+    if ( -not (Test-Path $file) ) {
+        try{
+            # wget.exe "$url" -O "$file"                            # wget下载
+            Invoke-WebRequest -Uri $url -OutFile $file              # 下载文件
+        } catch {
+            Write-Host "下载文件失败: " -ForegroundColor Yellow -NoNewline
+            Write-Host "$url" -ForegroundColor Red
+            return
+        }
+    }
+
+    if ($remove -and (Test-Path $path)) {
+        Remove-Item -Path $path -Recurse -Force -ErrorAction Stop   # 删除目录
+    }
+
+    try{
+        # 7z.exe x "$file" -o"$path" -y -aoa  | Out-Null            # 7zip解压
+        Expand-Archive -Path $file -DestinationPath $path -Force    # 解压文件
+    } catch {
+        Write-Host "解压文件失败: " -ForegroundColor Yellow -NoNewline
+        Write-Host "$file" -ForegroundColor Red
+        return
+    }
+
+    return $true
+
+}
