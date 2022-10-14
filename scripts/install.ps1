@@ -67,6 +67,11 @@ function install( $author_lib_ver ) {
     $resty = get_resty_path $temp
     if (-not $resty) { return }
 
+    # 创建 nginx/resty 目录
+    if (-not (Test-Path $root/nginx/resty)) {
+        New-Item -Path $root/nginx/resty -ItemType Directory | Out-Null
+    }
+
     Copy-Item -Path $resty/* -Destination $root/nginx/resty -Recurse -Force
 
     # 修改版本
