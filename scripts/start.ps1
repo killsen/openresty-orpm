@@ -41,7 +41,12 @@ if (-not $openresty_ver) {
         return
     }
 
-    $conf | Add-Member "openresty_ver" $openresty_ver -Force
+    if ($null -eq $conf.openresty_ver) {
+        $conf | Add-Member "openresty_ver" $openresty_ver -Force
+    } else {
+        $conf.openresty_ver = $openresty_ver
+    }
+
     $conf | ConvertTo-Json | Set-Content "$root/.openrestyrc"
 }
 
