@@ -27,10 +27,20 @@ function set_lib_ver($author, $lib, $ver) {
 
 }
 
+# 获取版本
+function get_lib_ver($lib) {
+    try {
+        $url   = "https://github.com/$lib/tags"
+        $regx  = "archive/refs/tags/(v?[\d.]+)\.zip"
+        $links = (Invoke-WebRequest -Uri "$url").Links | Where-Object { $_.href -match "$regx" }
+        if ($links[0].href -match "$regx") {
+            return $Matches[1]
+        }
+    } catch {}
+}
+
 # 安装
 function install( $author_lib_ver ) {
-
-    Write-Host "$author_lib_ver" -ForegroundColor Blue
 
     $root = get_root_path
 
@@ -39,7 +49,7 @@ function install( $author_lib_ver ) {
         return
     }
 
-    $pattern = "([\w-]+)/([\w-]+)@([\w-.]+)"
+    $pattern = "([\w-]+)/([\w-]+)(@([\w-.]+))?"
 
     if (-not ($author_lib_ver -match $pattern)) {
         Write-Host "author/lib@ver not match: $author_lib_ver"
@@ -48,7 +58,19 @@ function install( $author_lib_ver ) {
 
     $author = $Matches[1]
     $lib    = $Matches[2]
-    $ver    = $Matches[3]
+    $ver    = $Matches[4]
+
+    Write-Host "$author/$lib" -ForegroundColor Yellow -NoNewline
+
+    if (-not $ver -or $ver -eq "last") {
+        $ver = get_lib_ver "$author/$lib"  # 获取版本
+        if (-not $ver) {
+            Write-Host " (获取版本失败) " -ForegroundColor Red
+            return
+        }
+    }
+
+    Write-Host "@$ver" -ForegroundColor Blue
 
     $url    = "https://github.com/$author/$lib/archive/refs/tags/$ver.zip"
     $path   = "$root/.openresty/lua-resty-libs/$author/$lib"

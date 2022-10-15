@@ -1,10 +1,10 @@
 ﻿
-$version  = "v1.1.1"
+$version  = "v1.1.2"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
     if (-not $p1) {
-        Write-Host "---------------------------------------------------------"
+        Write-Host "------------------------------------------------------------"
     } else {
         Write-Host "orpm " -ForegroundColor Yellow -NoNewline
         Write-Host "$p1 "  -ForegroundColor Blue   -NoNewline
@@ -26,9 +26,10 @@ function show_menu() {
     add_line "update" "  # 升级 lua-resty-libs"
     add_line "install" " # 安装 lua-resty-libs"
     add_line
-    add_line "install" " bungle/lua-resty-template@v2.0"
-    add_line "install" " ledgetech/lua-resty-http@v0.16.1"
-    add_line "install" " thibaultcha/lua-resty-mlcache@2.5.0"
+    add_line "install" " bungle/lua-resty-template       # 安装最新版本"
+    add_line "install" " bungle/lua-resty-template@v2.0  # 安装指定版本"
+    add_line "install" " ledgetech/lua-resty-http"
+    add_line "install" " thibaultcha/lua-resty-mlcache"
     add_line
 
 }
