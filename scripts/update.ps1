@@ -28,10 +28,10 @@ function update_lib_ver($lib, $ver) {
 
     try {
         $url   = "https://github.com/$lib/tags"
-        $links = (Invoke-WebRequest -Uri "$url").Links |
-            Where-Object { $_.href -like "/$lib/archive/refs/tags/*.zip" }
+        $regx  = "archive/refs/tags/(v?[\d.]+)\.zip"
+        $links = (Invoke-WebRequest -Uri "$url").Links | Where-Object { $_.href -match "$regx" }
 
-        if ($links[0].href -match "/$lib/archive/refs/tags/(.+)\.zip") {
+        if ($links[0].href -match "$regx") {
             if ($ver -eq $Matches[1]) {
                 Write-Host " (版本一致) " -ForegroundColor Blue
             } else {

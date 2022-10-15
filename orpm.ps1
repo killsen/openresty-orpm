@@ -1,5 +1,5 @@
 ﻿
-$version  = "v1.1.0"
+$version  = "v1.1.1"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -24,7 +24,7 @@ function show_menu() {
     add_line "start" "   # 启动 nginx 服务"
     add_line "stop" "    # 停止 nginx 服务"
     add_line "update" "  # 升级 lua-resty-libs"
-    add_line "install" " # 安装 lua-resty-lib"
+    add_line "install" " # 安装 lua-resty-libs"
     add_line
     add_line "install" " bungle/lua-resty-template@v2.0"
     add_line "install" " ledgetech/lua-resty-http@v0.16.1"

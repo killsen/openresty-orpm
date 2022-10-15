@@ -18,7 +18,7 @@ scoop install dev/orpm
 
 ```PowerShell
 
-orpm version  # 版本 v1.1.0
+orpm version  # 版本 v1.1.1
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm init     # 创建 .openrestyrc 配置文件
