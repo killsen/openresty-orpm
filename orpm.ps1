@@ -1,5 +1,5 @@
 ﻿
-$version  = "v1.0.6"
+$version  = "v1.1.0"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -44,7 +44,7 @@ switch ($args[0]) {
 
     "install" {
         if (-not $args[1]) {
-            show_menu
+            . $PSScriptRoot\scripts\install_libs.ps1
         } else {
             . $PSScriptRoot\scripts\install.ps1
             install $args[1]

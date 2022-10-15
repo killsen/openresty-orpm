@@ -55,12 +55,15 @@ function download_expand($url, $file, $path, $remove) {
     }
 
     try{
-        # 7z.exe x "$file" -o"$path" -y -aoa  | Out-Null            # 7zip解压
-        Expand-Archive -Path $file -DestinationPath $path -Force    # 解压文件
+        7z.exe x "$file" -o"$path" -y -aoa  | Out-Null                  # 7zip解压
     } catch {
-        Write-Host "解压文件失败: " -ForegroundColor Yellow -NoNewline
-        Write-Host "$file" -ForegroundColor Red
-        return
+        try {
+            Expand-Archive -Path $file -DestinationPath $path -Force    # 解压文件
+        } catch {
+            Write-Host "解压文件失败: " -ForegroundColor Yellow -NoNewline
+            Write-Host "$file" -ForegroundColor Red
+            return
+        }
     }
 
     return $true

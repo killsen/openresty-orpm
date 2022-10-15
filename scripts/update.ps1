@@ -19,17 +19,37 @@ try {
 }
 
 if (-not $conf.lua_resty_libs) {
-    log "no lua resty libs installed"
+    Write-Host "尚未安装 lua-resty-libs" -ForegroundColor Red
     return
 }
 
-# 关闭 nginx 进程
-Get-Process -Name "nginx*" | Stop-Process -PassThru
+function update_lib_ver($lib, $ver) {
+    Write-Host "$lib@$ver" -ForegroundColor Yellow -NoNewline
+
+    try {
+        $url   = "https://github.com/$lib/tags"
+        $links = (Invoke-WebRequest -Uri "$url").Links |
+            Where-Object { $_.href -like "/$lib/archive/refs/tags/*.zip" }
+
+        if ($links[0].href -match "/$lib/archive/refs/tags/(.+)\.zip") {
+            if ($ver -eq $Matches[1]) {
+                Write-Host " (版本一致) " -ForegroundColor Blue
+            } else {
+                $ver = $Matches[1]
+                Write-Host " >> " -ForegroundColor Red -NoNewline
+                install "$lib@$ver"
+            }
+            return
+        }
+    } catch {}
+
+    Write-Host " (获取版本失败) " -ForegroundColor Red -NoNewline
+    Write-Host "$url"
+}
 
 foreach($lib in $conf.lua_resty_libs.PSObject.Properties)
 {
     if (-not ($lib.Value.StartsWith("#")) ) {
-        $lib_ver = $lib.Name + "@" + $lib.Value
-        install $lib_ver
+        update_lib_ver $lib.Name $lib.Value
     }
 }

@@ -18,7 +18,7 @@ scoop install dev/orpm
 
 ```PowerShell
 
-orpm version  # 版本 v1.0.6
+orpm version  # 版本 v1.1.0
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm init     # 创建 .openrestyrc 配置文件
@@ -26,7 +26,7 @@ orpm start    # 启动 nginx 服务
 orpm stop     # 停止 nginx 服务
 
 orpm update   # 升级 lua-resty-libs
-orpm install  # 安装 lua-resty-lib
+orpm install  # 安装 lua-resty-libs
 
 ```
 
