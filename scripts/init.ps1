@@ -1,7 +1,16 @@
-﻿
+﻿# 引入工具库
+. $PSScriptRoot\utils.ps1
+
+$root = get_root_path
+
+if ($root) {
+    Write-Host "已存在配置文件: " -ForegroundColor Yellow -NoNewline
+    Write-Host "$root\.orpmrc" -ForegroundColor Blue
+    return
+}
 
 $path = Get-Location
-$file = "$path\.openrestyrc"
+$file = "$path\.orpmrc"
 
 if (-not (Test-Path $file)) {
     New-Item $file -ItemType File | Out-Null
@@ -21,7 +30,7 @@ function set_default($key, $default) {
 
 set_default "app_name"          ""
 set_default "openresty_ver"     ""
-set_default "lua_resty_libs"    @{}
+set_default "libs"              @{}
 
 $conf | ConvertTo-Json | Set-Content "$file"
 

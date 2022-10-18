@@ -7,18 +7,18 @@ $root = get_root_path
 if ($root) {
     Write-Host "root: $root" -ForegroundColor Red
 } else {
-    Write-Host ".openrestyrc 文件不存在" -ForegroundColor Red
+    Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
     return
 }
 
 try {
-    $conf = Get-Content "$root/.openrestyrc" | ConvertFrom-JSON
+    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
 } catch {
-    Write-Host ".openrestyrc 文件读取失败" -ForegroundColor Red
+    Write-Host ".orpmrc 文件读取失败" -ForegroundColor Red
     return
 }
 
-if (-not $conf.lua_resty_libs) {
+if (-not $conf.libs) {
     Write-Host "尚未安装 lua-resty-libs" -ForegroundColor Red
     return
 }
@@ -47,7 +47,7 @@ function update_lib_ver($lib, $ver) {
     Write-Host "$url"
 }
 
-foreach($lib in $conf.lua_resty_libs.PSObject.Properties)
+foreach($lib in $conf.libs.PSObject.Properties)
 {
     if (-not ($lib.Value.StartsWith("#")) ) {
         update_lib_ver $lib.Name $lib.Value

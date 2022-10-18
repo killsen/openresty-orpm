@@ -1,5 +1,6 @@
 ﻿# 引入工具库
 . $PSScriptRoot\utils.ps1
+. $PSScriptRoot\install_luarocks.ps1
 
 # 修改版本
 function set_lib_ver($author, $lib, $ver) {
@@ -7,23 +8,23 @@ function set_lib_ver($author, $lib, $ver) {
     $root = get_root_path
     if (-not $root) { return }
 
-    $conf = Get-Content "$root/.openrestyrc" | ConvertFrom-JSON
+    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
     if (-not $conf) { $conf = @{} }
 
-    $old_ver = $conf.lua_resty_libs.("$author/$lib")
+    $old_ver = $conf.libs.("$author/$lib")
     if ($old_ver -eq "$ver") { return }  # 版本一致退出
 
-    if ( -not $conf.lua_resty_libs ) {
-        $conf | Add-Member "lua_resty_libs" @{ "$author/$lib" = "$ver" } -Force
+    if ( -not $conf.libs ) {
+        $conf | Add-Member "libs" @{ "$author/$lib" = "$ver" } -Force
 
     } elseif ( $old_ver ) {
-        $conf.lua_resty_libs.("$author/$lib") = "$ver"
+        $conf.libs.("$author/$lib") = "$ver"
 
     } else {
-        $conf.lua_resty_libs | Add-Member "$author/$lib" "$ver" -Force
+        $conf.libs | Add-Member "$author/$lib" "$ver" -Force
     }
 
-    $conf | ConvertTo-Json | Set-Content "$root/.openrestyrc"
+    $conf | ConvertTo-Json | Set-Content "$root/.orpmrc"
 
 }
 
@@ -45,20 +46,44 @@ function install( $author_lib_ver ) {
     $root = get_root_path
 
     if (-not $root) {
-        Write-Host ".openrestyrc 文件不存在" -ForegroundColor Red
+        Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
         return
     }
 
-    $pattern = "([\w-]+)/([\w-]+)(@([\w-.]+))?"
+    $author_lib_ver = $author_lib_ver.ToLower()
+    $pattern = "(([\w-]+)/)?([\w-]+)(@([\w-.]+))?"
 
     if (-not ($author_lib_ver -match $pattern)) {
         Write-Host "author/lib@ver not match: $author_lib_ver"
         return
     }
 
-    $author = $Matches[1]
-    $lib    = $Matches[2]
-    $ver    = $Matches[4]
+    $author = $Matches[2]
+    $lib    = $Matches[3]
+    $ver    = $Matches[5]
+
+    if (-not $author) { $author = "rocks" }
+
+    if ($author -eq "rocks") {
+        $rocks = install_luarocks
+        if (-not $rocks) { return }
+        try {
+            Write-Host "$author/$lib" -ForegroundColor Yellow -NoNewline
+            $ok = $false
+            & $rocks install "$lib" | ForEach-Object {
+                if ($_ -match "$lib (([\w-.]+)) is now installed in") {
+                    $ver = $Matches[1]
+                    Write-Host "@$ver" -ForegroundColor Blue
+                    set_lib_ver $author $lib $ver
+                    $ok = $true
+                }
+            }
+            if (-not $ok) {
+                Write-Host " (安装失败) " -ForegroundColor Red
+            }
+        } catch {}
+        return
+    }
 
     Write-Host "$author/$lib" -ForegroundColor Yellow -NoNewline
 
@@ -73,7 +98,7 @@ function install( $author_lib_ver ) {
     Write-Host "@$ver" -ForegroundColor Blue
 
     $url    = "https://github.com/$author/$lib/archive/refs/tags/$ver.zip"
-    $path   = "$root/.openresty/lua-resty-libs/$author/$lib"
+    $path   = "$root/.orpm/libs/$author/$lib"
     $file   = "$path/$ver.zip"
     $temp   = "$path/$ver"
 

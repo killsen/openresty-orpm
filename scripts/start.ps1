@@ -1,5 +1,6 @@
 ﻿# 引入工具库
 . $PSScriptRoot\utils.ps1
+. $PSScriptRoot\install_openresty.ps1
 
 # 清屏
 Clear-Host
@@ -12,70 +13,28 @@ $root = get_root_path
 if ($root) {
     Write-Host "root: $root" -ForegroundColor Red
 } else {
-    Write-Host ".openrestyrc 文件不存在" -ForegroundColor Red
+    Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
     return
 }
 
 try {
-    $conf = Get-Content "$root/.openrestyrc" | ConvertFrom-JSON
+    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
     if (-not $conf) { $conf = @{} }
 } catch {
-    Write-Host ".openrestyrc 文件读取失败" -ForegroundColor Red
+    Write-Host ".orpmrc 文件读取失败" -ForegroundColor Red
     return
 }
 
-$app_name           = $conf.app_name
-$openresty_ver      = $conf.openresty_ver
+$openresty = install_openresty
+if (-not $openresty) { return }
 
-if (-not $openresty_ver) {
-    $down = "https://openresty.org/download"
-    $link = (Invoke-WebRequest -Uri "$down").Links |
-        Where-Object {$_.href -like "$down/openresty-*-win32.zip"}
-
-    if ($link[0].href -match "openresty-(.+)-win32.zip") {
-        $openresty_ver = $Matches[1]
-    } else {
-        Write-Host "openresty_ver 未定义" -ForegroundColor Red
-        return
-    }
-
-    if ($null -eq $conf.openresty_ver) {
-        $conf | Add-Member "openresty_ver" $openresty_ver -Force
-    } else {
-        $conf.openresty_ver = $openresty_ver
-    }
-
-    $conf | ConvertTo-Json | Set-Content "$root/.openrestyrc"
-}
-
-$nginx              = "$root/nginx"
-$openresty          = "$root/.openresty"
-$openresty_win32    = "openresty-$openresty_ver-win32"
-$nginx_exe          = "$root/.openresty/$openresty_win32/nginx.exe"
-$lualib_link        = "$root/.openresty/$openresty_win32/lualib"
-$luajit_link        = "$root/.openresty/$openresty_win32/lua/jit"
-
-make_path $openresty
-
-if ( -not (Test-Path $nginx_exe) ) {
-    $url  = "https://openresty.org/download/$openresty_win32.zip"
-    $file = "$openresty/$openresty_win32.zip"
-
-    # 下载文件并解压
-    $ok = download_expand $url $file $openresty $false
-    if (-not $ok) { return }
-}
-
-make_path $nginx
-make_path $nginx/temp
-make_path $nginx/logs
-make_link $nginx/lualib  $lualib_link
-make_link $nginx/lua/jit $luajit_link
+$nginx_exe = "$openresty/nginx.exe"
 
 Write-Host ---------------------------------------------
 & $nginx_exe -v
 Write-Host ---------------------------------------------
 
+$app_name = $conf.app_name
 if ($app_name) {
     Write-Host http://127.0.0.1/$app_name/help  -ForegroundColor Blue
     Write-Host http://127.0.0.1/$app_name/_.gen_api_code.lpage -ForegroundColor Blue
@@ -90,4 +49,4 @@ Write-Host "conf: $root\nginx\conf\nginx.conf" -ForegroundColor Red
 Get-Process -Name "nginx*" | Stop-Process -PassThru
 
 # 运行 nginx
-Start-Process $nginx_exe -ArgumentList "-p $nginx" -NoNewWindow
+Start-Process $nginx_exe -ArgumentList "-p $root\nginx" -NoNewWindow

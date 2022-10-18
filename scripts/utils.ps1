@@ -3,7 +3,7 @@
 function get_root_path() {
     $path = Get-Location
     while($path) {
-        if (Test-Path "$path/.openrestyrc") {
+        if (Test-Path "$path/.orpmrc") {
             return "$path"
         } else {
             $path = Split-Path $path
