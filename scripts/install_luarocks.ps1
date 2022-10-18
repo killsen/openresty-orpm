@@ -6,6 +6,7 @@
 function install_luarocks() {
 
     $root = get_root_path
+    $orpm = get_orpm_path
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
@@ -13,32 +14,37 @@ function install_luarocks() {
     }
 
     $url  = "https://luarocks.github.io/luarocks/releases/luarocks-3.9.1-windows-32.zip"
-    $file = "$root/.orpm/luarocks/luarocks-3.9.1-windows-32.zip"
-    $path = "$root/.orpm/luarocks/"
+    $file = "$orpm/luarocks/luarocks-3.9.1-windows-32.zip"
+    $path = "$orpm/luarocks"
 
     make_path $path
 
-    # 下载文件并解压
-    $ok = download_expand $url $file $path
-    if (-not $ok) { return }
+    $luarocks_path = "$path/luarocks-3.9.1-windows-32"
+    $luarocks_exe  = "$luarocks_path/luarocks.exe"
 
-    $lua_dir = install_openresty
-    if (-not $lua_dir) { return }
+    if (-not (Test-Path "$luarocks_exe")) {
+        # 下载文件并解压
+        $ok = download_expand $url $file $path
+        if (-not $ok) { return }
+    }
+
+    $openresty = install_openresty
+    if (-not $openresty) { return }
 
     $mingw32_bin = install_mingw
     if (-not $mingw32_bin) { return }
 
-    $luarocks_path = "$path/luarocks-3.9.1-windows-32/"
-    $luarocks_exe  = "$luarocks_path/luarocks.exe"
-    $luarocks_conf = "$luarocks_path/config.lua"
+    make_path "$root/.rocks"
+
+    $luarocks_conf = "$root/.rocks/config.lua"
     $env:LUAROCKS_CONFIG = "$luarocks_conf"
 
  $CONF = @"
 
 rocks_trees = {
     {
-        root    = [[$luarocks_path]],
-        bin_dir = [[$luarocks_path/bin]],
+        root    = [[$root/.rocks]],
+        bin_dir = [[$root/.rocks/bin]],
         lib_dir = [[$root/nginx/clib]],
         lua_dir = [[$root/nginx/lua]],
     },
@@ -49,8 +55,8 @@ lua_version     = "5.1"
 verbose         = false
 
 variables = {
-    LUA_BINDIR  = [[$lua_dir]],
-    LUA_DIR     = [[$lua_dir]],
+    LUA_BINDIR  = [[$openresty]],
+    LUA_DIR     = [[$openresty]],
     LUALIB      = [[lua51.dll]],
     MSVCRT      = [[m]],   -- make MinGW use MSVCRT.DLL as runtime
     MAKE        = [[$mingw32_bin/make.exe]],
@@ -62,7 +68,7 @@ variables = {
 }
 "@
 
-    Set-Content "$luarocks_path/config.lua" $CONF
+    Set-Content "$luarocks_conf" $CONF
 
     return $luarocks_exe
 

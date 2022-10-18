@@ -44,6 +44,7 @@ function get_lib_ver($lib) {
 function install( $author_lib_ver ) {
 
     $root = get_root_path
+    $orpm = get_orpm_path
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
@@ -98,7 +99,7 @@ function install( $author_lib_ver ) {
     Write-Host "@$ver" -ForegroundColor Blue
 
     $url    = "https://github.com/$author/$lib/archive/refs/tags/$ver.zip"
-    $path   = "$root/.orpm/libs/$author/$lib"
+    $path   = "$orpm/libs/$author/$lib"
     $file   = "$path/$ver.zip"
     $temp   = "$path/$ver"
 

@@ -37,6 +37,7 @@ http {
 function install_openresty() {
 
     $root = get_root_path
+    $orpm = get_orpm_path
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
@@ -78,7 +79,7 @@ function install_openresty() {
     }
 
     $nginx              = "$root/nginx"
-    $openresty          = "$root/.orpm/openresty"
+    $openresty          = "$orpm/openresty"
     $openresty_win32    = "openresty-$openresty_ver-win32"
     $nginx_exe          = "$openresty/$openresty_win32/nginx.exe"
     $lualib_link        = "$openresty/$openresty_win32/lualib"

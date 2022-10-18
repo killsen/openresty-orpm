@@ -4,21 +4,23 @@ function get_root_path() {
     $path = Get-Location
     while($path) {
         if (Test-Path "$path/.orpmrc") {
-            return "$path"
+            return ("$path").replace("`\","`/")
         } else {
             $path = Split-Path $path
         }
     }
 }
 
-# 取得 lib/resty 目录
+# 取得 .orpm 目录
+function get_orpm_path() {
+    $drive = (Get-Location).Drive.Root
+    return ($drive + ".orpm").replace("`\","`/")
+}
+
+# 取得 lua-resty 目录
 function get_resty_path($path) {
     $resty = Get-ChildItem -Path $path -Recurse | Where-Object { $_.Name -eq "resty" }
     return $resty.FullName
-}
-
-function log($log) {
-    Write-Host $log -ForegroundColor Blue
 }
 
 # 创建目录

@@ -4,6 +4,7 @@
 function install_mingw() {
 
     $root = get_root_path
+    $orpm = get_orpm_path
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
@@ -11,8 +12,8 @@ function install_mingw() {
     }
 
     $url  = "https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-posix-dwarf-rt_v10-rev0.7z"
-    $file = "$root/.orpm/mingw/mingw32.7z"
-    $path = "$root/.orpm/mingw/"
+    $file = "$orpm/mingw/mingw32.7z"
+    $path = "$orpm/mingw"
 
     $mingw32_bin = "$path/mingw32/bin"
 
