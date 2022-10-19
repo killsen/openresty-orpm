@@ -38,62 +38,43 @@ function install_openresty() {
 
     $root = get_root_path
     $orpm = get_orpm_path
+    $conf = get_orpm_conf
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
         return
     }
 
-    try {
-        $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
-        if (-not $conf) { $conf = @{} }
-    } catch {
-        Write-Host ".orpmrc 文件读取失败" -ForegroundColor Red
-        return
-    }
-
     # 关闭 nginx 进程
     Get-Process -Name "nginx*" | Stop-Process
 
-    $openresty_ver = $conf.openresty_ver
+    $ver = $conf.openresty_ver
+    if (-not $ver) { $ver = "1.21.4.1" }
 
-    if (-not $openresty_ver) {
-        $down = "https://openresty.org/download"
-        $link = (Invoke-WebRequest -Uri "$down").Links |
-            Where-Object {$_.href -like "$down/openresty-*-win32.zip"}
-
-        if ($link[0].href -match "openresty-(.+)-win32.zip") {
-            $openresty_ver = $Matches[1]
-        } else {
-            Write-Host "openresty_ver 未定义" -ForegroundColor Red
-            return
-        }
-
-        if ($null -eq $conf.openresty_ver) {
-            $conf | Add-Member "openresty_ver" $openresty_ver -Force
-        } else {
-            $conf.openresty_ver = $openresty_ver
-        }
-
-        $conf | ConvertTo-Json | Set-Content "$root/.orpmrc"
+    if ($conf.arch -eq "64bit" -or $conf.arch -eq "64") {
+        $bit = "64"
+    } else {
+        $bit = "32"
     }
 
     $nginx              = "$root/nginx"
     $openresty          = "$orpm/openresty"
-    $openresty_win32    = "openresty-$openresty_ver-win32"
-    $nginx_exe          = "$openresty/$openresty_win32/nginx.exe"
-    $lualib_link        = "$openresty/$openresty_win32/lualib"
-    $luajit_link        = "$openresty/$openresty_win32/lua/jit"
+    $openresty_bit      = "openresty-$ver-win$bit"
+    $nginx_exe          = "$openresty/$openresty_bit/nginx.exe"
+    $lualib_link        = "$openresty/$openresty_bit/lualib"
+    $luajit_link        = "$openresty/$openresty_bit/lua/jit"
 
     make_path $openresty
 
     if ( -not (Test-Path $nginx_exe) ) {
-        $url  = "https://openresty.org/download/$openresty_win32.zip"
-        $file = "$openresty/$openresty_win32.zip"
+        $url  = "https://openresty.org/download/$openresty_bit.zip"
+        $file = "$openresty/$openresty_bit.zip"
 
         # 下载文件并解压
-        $ok = download_expand $url $file $openresty $false
-        if (-not $ok) { return }
+        download_expand $url $file $openresty $false
+        if (-not (Test-Path $nginx_exe)) {
+            return
+        }
     }
 
     make_path $nginx
@@ -108,6 +89,6 @@ function install_openresty() {
         Set-Content "$nginx/conf/nginx.conf" $conf
     }
 
-    return "$openresty/$openresty_win32"
+    return "$openresty/$openresty_bit"
 
 }
