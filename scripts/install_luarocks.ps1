@@ -7,37 +7,53 @@ function install_luarocks() {
 
     $root = get_root_path
     $orpm = get_orpm_path
+    $conf = get_orpm_conf
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
         return
     }
 
-    $url  = "https://luarocks.github.io/luarocks/releases/luarocks-3.9.1-windows-32.zip"
-    $file = "$orpm/luarocks/luarocks-3.9.1-windows-32.zip"
+    $ver = $conf.luarocks_ver
+    if (-not $ver) { $ver = "3.9.1" }
+
+    if ($conf.arch -eq "64bit" -or $conf.arch -eq "64") {
+        $bit = "64"
+    } else {
+        $bit = "32"
+    }
+
+    $name = "luarocks-$ver-windows-$bit"
+    $url  = "http://luarocks.github.io/luarocks/releases/$name.zip"
+    $file = "$orpm/luarocks/$name.zip"
     $path = "$orpm/luarocks"
 
     make_path $path
 
-    $luarocks_path = "$path/luarocks-3.9.1-windows-32"
+    $luarocks_path = "$path/$name"
     $luarocks_exe  = "$luarocks_path/luarocks.exe"
 
-    if (-not (Test-Path "$luarocks_exe")) {
+    if (-not (Test-Path $luarocks_exe)) {
         # 下载文件并解压
-        $ok = download_expand $url $file $path
-        if (-not $ok) { return }
+        download_expand $url $file $path
+        if (-not (Test-Path $luarocks_exe)) {
+            return
+        }
     }
 
     $openresty = install_openresty
     if (-not $openresty) { return }
 
-    $mingw32_bin = install_mingw
-    if (-not $mingw32_bin) { return }
+    $mingw_bin = install_mingw
+    if (-not $mingw_bin) { return }
 
     make_path "$root/.rocks"
 
-    $luarocks_conf = "$root/.rocks/config.lua"
-    $env:LUAROCKS_CONFIG = "$luarocks_conf"
+    $luarocks_config = "$root/.rocks/config.lua"
+    $ENV:LUAROCKS_CONFIG = "$luarocks_config"
+
+    $env_path = $ENV:PATH -replace "$mingw_bin;", ""
+    $ENV:PATH = "$mingw_bin;$env_path"
 
  $CONF = @"
 
@@ -59,16 +75,16 @@ variables = {
     LUA_DIR     = [[$openresty]],
     LUALIB      = [[lua51.dll]],
     MSVCRT      = [[m]],   -- make MinGW use MSVCRT.DLL as runtime
-    MAKE        = [[$mingw32_bin/make.exe]],
-    CC          = [[$mingw32_bin/gcc.exe]],
-    LD          = [[$mingw32_bin/gcc.exe]],
-    RC          = [[$mingw32_bin/windres.exe]],
-    AR          = [[$mingw32_bin/ar.exe]],
-    RANLIB      = [[$mingw32_bin/ranlib.exe]],
+    MAKE        = [[$mingw_bin/make.exe]],
+    CC          = [[$mingw_bin/gcc.exe]],
+    LD          = [[$mingw_bin/gcc.exe]],
+    RC          = [[$mingw_bin/windres.exe]],
+    AR          = [[$mingw_bin/ar.exe]],
+    RANLIB      = [[$mingw_bin/ranlib.exe]],
 }
 "@
 
-    Set-Content "$luarocks_conf" $CONF
+    Set-Content "$luarocks_config" $CONF
 
     return $luarocks_exe
 
