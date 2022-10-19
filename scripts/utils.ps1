@@ -17,6 +17,16 @@ function get_orpm_path() {
     return ($drive + ".orpm").replace("`\","`/")
 }
 
+# 获取 orpm 配置
+function get_orpm_conf() {
+
+    $root = get_root_path
+    if (-not $root) { return }
+
+    Get-Content "$root/.orpmrc" | ConvertFrom-JSON
+
+}
+
 # 取得 lua-resty 目录
 function get_resty_path($path) {
     $resty = Get-ChildItem -Path $path -Recurse | Where-Object { $_.Name -eq "resty" }
