@@ -15,7 +15,7 @@ function install_luarocks() {
     }
 
     $ver = $conf.luarocks_ver
-    if (-not $ver) { $ver = "3.9.1" }
+    if (-not $ver) { $ver = "3.8.0" }
 
     if ($conf.arch -eq "64bit" -or $conf.arch -eq "64") {
         $bit = "64"

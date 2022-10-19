@@ -33,7 +33,7 @@ function set_default($key, $default) {
 
 set_default "app_name"          ""
 set_default "openresty_ver"     "1.21.4.1"
-set_default "luarocks_ver"      "3.9.1"
+set_default "luarocks_ver"      "3.8.0"
 set_default "mingw_ver"         "12.2.0"
 set_default "arch"              "32bit"
 set_default "libs"              @{}
