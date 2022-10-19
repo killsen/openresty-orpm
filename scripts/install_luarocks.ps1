@@ -35,8 +35,8 @@ function install_luarocks() {
 
     if (-not (Test-Path $luarocks_exe)) {
         # 下载文件并解压
-        download_expand $url $file $path
-        if (-not (Test-Path $luarocks_exe)) {
+        $ok = download_expand $url $file $path
+        if (-not $ok -or -not (Test-Path $luarocks_exe)) {
             return
         }
     }
@@ -82,6 +82,8 @@ variables = {
     AR          = [[$mingw_bin/ar.exe]],
     RANLIB      = [[$mingw_bin/ranlib.exe]],
 }
+
+verbose = true
 "@
 
     Set-Content "$luarocks_config" $CONF

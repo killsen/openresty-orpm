@@ -33,8 +33,8 @@ function install_mingw() {
     $gcc_exe = "$mingw_bin/gcc.exe"
     if (-not (Test-Path $gcc_exe)) {
         # 下载文件并解压
-        download_expand $url $file $path
-        if (-not (Test-Path $gcc_exe)) {
+        $ok = download_expand $url $file $path
+        if (-not $ok -or -not (Test-Path $gcc_exe)) {
             return
         }
     }

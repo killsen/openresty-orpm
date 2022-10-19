@@ -71,8 +71,8 @@ function install_openresty() {
         $file = "$openresty/$openresty_bit.zip"
 
         # 下载文件并解压
-        download_expand $url $file $openresty $false
-        if (-not (Test-Path $nginx_exe)) {
+        $ok = download_expand $url $file $openresty $false
+        if (-not $ok -or -not (Test-Path $nginx_exe)) {
             return
         }
     }
