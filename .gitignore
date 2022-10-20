@@ -1,4 +1,3 @@
-nginx
-.orpm
-.orpmrc
 .rocks
+lua_modules
+nginx

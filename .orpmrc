@@ -1,0 +1,25 @@
+{
+    "app_name":  "",
+    "openresty_ver":  "1.21.4.1",
+    "luarocks_ver":  "3.9.1",
+    "mingw_ver":  "12.2.0",
+    "arch":  "32bit",
+    "libs":  {
+                 "bungle/lua-resty-session":  "v3.10",
+                 "thibaultcha/lua-resty-mlcache":  "2.6.0",
+                 "fffonion/lua-resty-acme":  "0.8.1",
+                 "hamishforbes/lua-resty-iputils":  "v0.3.0",
+                 "fffonion/lua-resty-openssl":  "0.8.13",
+                 "bungle/lua-resty-template":  "v2.0",
+                 "tokers/lua-resty-requests":  "v0.7.3",
+                 "tokers/lua-resty-socket":  "1.0.1",
+                 "ledgetech/lua-resty-http":  "v0.16.1",
+                 "woothee/lua-resty-woothee":  "v1.10.0",
+                 "openresty/lua-resty-balancer":  "v0.04",
+                 "gui/lua-resty-mail":  "v1.0.2",
+                 "rocks/luafilesystem":  "1.8.0-1",
+                 "rocks/luasocket":  "3.1.0-1",
+                 "rocks/hashids":  "1.0.6-1",
+                 "rocks/utf8":  "1.2-0"
+             }
+}
