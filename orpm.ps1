@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.1.1"
+$version  = "v2.2.0"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -25,6 +25,7 @@ function show_menu() {
     add_line "stop" "    # 停止 nginx 服务"
     add_line "update" "  # 升级 libs"
     add_line "install" " # 安装 libs"
+    add_line "rocks" "   # 执行 luarocks"
     add_line
     add_line "install" " bungle/lua-resty-template       # 安装最新版本"
     add_line "install" " bungle/lua-resty-template@v2.0  # 安装指定版本"
@@ -43,6 +44,16 @@ switch ($args[0]) {
     "start"   { . $PSScriptRoot\scripts\start.ps1   }
     "stop"    { . $PSScriptRoot\scripts\stop.ps1    }
     "update"  { . $PSScriptRoot\scripts\update.ps1  }
+
+    "rocks"   {
+        . $PSScriptRoot\scripts\install_luarocks.ps1
+        $rocks = install_luarocks
+        if (-not $rocks) { return }
+        if ($args.Count -gt 1) {
+            $argx = $args[1..($args.Count-1)]
+        }
+        & $rocks $argx
+    }
 
     "install" {
         if (-not $args[1]) {

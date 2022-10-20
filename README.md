@@ -18,7 +18,7 @@ scoop install dev/orpm
 
 ```PowerShell
 
-orpm version  # 版本 v2.1.1
+orpm version  # 版本 v2.2.0
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm init     # 创建 .orpmrc 配置文件
@@ -27,6 +27,7 @@ orpm stop     # 停止 nginx 服务
 
 orpm update   # 升级 libs
 orpm install  # 安装 libs
+orpm rocks    # 执行 luarocks
 
 ```
 
