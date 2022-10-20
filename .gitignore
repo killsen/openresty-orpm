@@ -1,4 +1,5 @@
 .rocks
 lua_modules
-nginx
-my-app
+/nginx
+/my-app
+*.zip
