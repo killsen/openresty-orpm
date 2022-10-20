@@ -47,28 +47,40 @@ function install_luarocks() {
     $mingw_bin = install_mingw
     if (-not $mingw_bin) { return }
 
-    make_path "$root/.rocks"
+    $rocks_path = "$root/.rocks/$bit" + "bit"
+    make_path "$rocks_path"
 
-    $luarocks_config = "$root/.rocks/config.lua"
+    make_path "$rocks_path/lua_modules"
+    make_path "$rocks_path/lua_modules/clib"
+    make_path "$rocks_path/lua_modules/lua"
+
+    make_link "$root/lua_modules/clib" "$rocks_path/lua_modules/clib"
+    make_link "$root/lua_modules/lua"  "$rocks_path/lua_modules/lua"
+
+    $luarocks_config = "$rocks_path/config.lua"
     $ENV:LUAROCKS_CONFIG = "$luarocks_config"
+
+    $env_path = $ENV:PATH -replace "$luarocks_path;", ""
+    $ENV:PATH = "$luarocks_path;$env_path"
 
     $env_path = $ENV:PATH -replace "$mingw_bin;", ""
     $ENV:PATH = "$mingw_bin;$env_path"
 
- $CONF = @"
+    $CONF = @"
 
 rocks_trees = {
     {
-        root    = [[$root/.rocks]],
-        bin_dir = [[$root/.rocks/bin]],
-        lib_dir = [[$root/nginx/clib]],
-        lua_dir = [[$root/nginx/lua]],
-    },
+        root    = [[$rocks_path]],
+        bin_dir = [[$rocks_path/bin]],
+        lib_dir = [[$rocks_path/lua_modules/clib]],
+        lua_dir = [[$rocks_path/lua_modules/lua]],
+    }
 }
 
 lua_interpreter = [[luajit.exe]]
 lua_version     = "5.1"
 verbose         = false
+keep_other_versions = false
 
 variables = {
     LUA_BINDIR  = [[$openresty]],
@@ -82,8 +94,6 @@ variables = {
     AR          = [[$mingw_bin/ar.exe]],
     RANLIB      = [[$mingw_bin/ranlib.exe]],
 }
-
-verbose = true
 "@
 
     Set-Content "$luarocks_config" $CONF
