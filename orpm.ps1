@@ -64,5 +64,10 @@ switch ($args[0]) {
         }
     }
 
+    "create" {
+        . $PSScriptRoot\scripts\create.ps1
+        create_app $args[1] $args[2]
+    }
+
     default { show_menu }
 }

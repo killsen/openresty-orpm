@@ -53,7 +53,7 @@ function install_openresty() {
     make_link $nginx/lua/jit $luajit_link
 
     if (-not (Test-Path "$nginx/conf/nginx.conf")) {
-        $conf = Get-Content "$PSScriptRoot/../nginx.conf"
+        $conf = Get-Content "$PSScriptRoot/../template/default/nginx/conf/nginx.conf"
         Set-Content "$nginx/conf/nginx.conf" $conf
     }
 
