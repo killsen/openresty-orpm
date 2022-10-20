@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.2.0"
+$version  = "v2.2.1"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -67,6 +67,33 @@ switch ($args[0]) {
     "create" {
         . $PSScriptRoot\scripts\create.ps1
         create_app $args[1] $args[2]
+    }
+
+    "hash" {
+
+        try {
+            $url  = "https://github.com/killsen/openresty-orpm/archive/refs/tags/$version.zip"
+            $file = "$PSScriptRoot/$version.zip"
+
+            Invoke-WebRequest -Uri $url -OutFile $file
+            $hash = Get-FileHash -Path $file -Algorithm SHA256
+            Remove-Item $file
+
+            Write-Host
+            Write-Host "ver  : " -ForegroundColor Yellow -NoNewline
+            Write-Host "$version"  -ForegroundColor Blue
+            Write-Host "hash : " -ForegroundColor Yellow -NoNewline
+            Write-Host $hash.Hash.ToLower()  -ForegroundColor Blue
+            Write-Host "json : " -ForegroundColor Yellow -NoNewline
+            Write-Host "https://github.com/killsen/scoop-dev/edit/main/bucket/orpm.json"
+            Write-Host
+        } catch {
+            Write-Host
+            Write-Host "出错了: " -ForegroundColor Yellow -NoNewline
+            Write-Host "$_" -ForegroundColor Red
+            Write-Host
+        }
+
     }
 
     default { show_menu }
