@@ -1,38 +1,6 @@
 ﻿# 引入工具库
 . $PSScriptRoot\utils.ps1
 
-function get_nginx_conf() {
-@"
-worker_processes  1;
-
-events {
-    worker_connections  1024;
-}
-
-http {
-
-    lua_package_path "`${prefix}?.lua;`${prefix}?/init.lua;`${prefix}lua/?.lua;`${prefix}lua/?/init.lua;;";
-    lua_package_cpath "`${prefix}clib/?.dll;`${prefix}clib/?/?.dll;`${prefix}?.dll;`${prefix}clib/?.so;`${prefix}clib/?/?.so;`${prefix}?.so;;";
-
-    client_body_temp_path      	 	temp/client_body_temp;
-    fastcgi_temp_path           	temp/fastcgi_temp;
-    proxy_temp_path             	temp/proxy_temp;
-    scgi_temp_path              	temp/scgi_temp;
-    uwsgi_temp_path             	temp/uwsgi_temp;
-
-    server {
-        listen       80;
-        server_name  localhost;
-        location / {
-            content_by_lua_block {
-                ngx.say "Hello, OpenResty!"
-            }
-        }
-    }
-}
-"@
-}
-
 # 安装 openresty
 function install_openresty() {
 
@@ -85,7 +53,7 @@ function install_openresty() {
     make_link $nginx/lua/jit $luajit_link
 
     if (-not (Test-Path "$nginx/conf/nginx.conf")) {
-        $conf = get_nginx_conf
+        $conf = Get-Content "$PSScriptRoot/../nginx.conf"
         Set-Content "$nginx/conf/nginx.conf" $conf
     }
 

@@ -1,6 +1,7 @@
 ﻿# 引入工具库
 . $PSScriptRoot\utils.ps1
 . $PSScriptRoot\install_openresty.ps1
+. $PSScriptRoot\install_luarocks.ps1
 
 # 清屏
 Clear-Host
@@ -27,6 +28,9 @@ try {
 
 $openresty = install_openresty
 if (-not $openresty) { return }
+
+$luarocks_exe = install_luarocks
+if (-not $luarocks_exe) { return }
 
 $nginx_exe = "$openresty/nginx.exe"
 
