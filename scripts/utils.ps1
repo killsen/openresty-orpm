@@ -33,6 +33,13 @@ function get_resty_path($path) {
     return $resty.FullName
 }
 
+function get_lua_modules($path, $bit) {
+    $bit_path = Get-ChildItem -Path $path -Recurse | Where-Object { $_.Name -eq $bit }
+    if ($bit_path) {
+        return $bit_path.FullName.Replace("`\", "`/") + "/lua_modules"
+    }
+}
+
 # 创建目录
 function make_path($path) {
     if ( -not (Test-Path $path) ) {

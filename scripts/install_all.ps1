@@ -54,10 +54,14 @@ if (-not $conf.libs) {
 
 foreach($lib in $conf.libs.PSObject.Properties)
 {
-    if (-not ($lib.Value.StartsWith("#")) ) {
-        $lib_ver = $lib.Name + "@" + $lib.Value
-        install $lib_ver
-    }
+    $name, $ver = $lib.Name, $lib.Value
+
+    if ( $name.StartsWith("rocks") ) { continue }
+    if ( $name.StartsWith("#") ) { continue }
+    if ( $ver.StartsWith("#") ) { continue }
+
+    install "$name@$ver"
+
 }
 
 Write-Host "-------------------------------------------------"

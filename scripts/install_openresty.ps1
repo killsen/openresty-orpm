@@ -49,8 +49,10 @@ function install_openresty() {
     make_path $nginx/conf
     make_path $nginx/temp
     make_path $nginx/logs
-    make_link $nginx/lualib  $lualib_link
-    make_link $nginx/lua/jit $luajit_link
+
+    make_path $root/lua_modules
+    make_link $root/lua_modules/lualib      $lualib_link
+    make_link $root/lua_modules/lualib/jit  $luajit_link
 
     if (-not (Test-Path "$nginx/conf/nginx.conf")) {
         $conf = Get-Content "$PSScriptRoot/../template/default/nginx/conf/nginx.conf"

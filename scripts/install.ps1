@@ -45,6 +45,7 @@ function install( $author_lib_ver ) {
 
     $root = get_root_path
     $orpm = get_orpm_path
+    $conf = get_orpm_conf
 
     if (-not $root) {
         Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
@@ -113,14 +114,36 @@ function install( $author_lib_ver ) {
 
     # 找到 lib/resty 目录并拷贝文件到 nginx/resty 目录
     $resty = get_resty_path $temp
-    if (-not $resty) { return }
+    if ($resty) {
+        # 创建 nginx/resty 目录
+        if (-not (Test-Path $root/nginx/resty)) {
+            New-Item -Path $root/nginx/resty -ItemType Directory | Out-Null
+        }
+        Copy-Item -Path $resty/* -Destination $root/nginx/resty -Recurse -Force
 
-    # 创建 nginx/resty 目录
-    if (-not (Test-Path $root/nginx/resty)) {
-        New-Item -Path $root/nginx/resty -ItemType Directory | Out-Null
+        # 修改版本
+        set_lib_ver $author $lib $ver
+
+        return
     }
 
-    Copy-Item -Path $resty/* -Destination $root/nginx/resty -Recurse -Force
+    if ($conf.arch -eq "64" -or $conf.arch -eq "64bit") {
+        $bit = "64bit"
+    } else {
+        $bit = "32bit"
+    }
+
+    $lua_modules = get_lua_modules $temp $bit
+    if (-not $lua_modules) { return }
+
+    $clib = "$root/.rocks/$bit/lua_modules/clib"
+    $lua  = "$root/.rocks/$bit/lua_modules/lua"
+
+    make_path $clib
+    make_path $lua
+
+    Copy-Item -Path $lua_modules/clib/* -Destination $clib -Recurse -Force
+    Copy-Item -Path $lua_modules/lua/*  -Destination $lua  -Recurse -Force
 
     # 修改版本
     set_lib_ver $author $lib $ver
