@@ -17,6 +17,7 @@
                  "woothee/lua-resty-woothee":  "v1.10.0",
                  "openresty/lua-resty-balancer":  "v0.04",
                  "gui/lua-resty-mail":  "v1.0.2",
+                 "killsen/openresty-clib": "v1.0.0",
                  "rocks/luafilesystem":  "1.8.0-1",
                  "rocks/luasocket":  "3.1.0-1",
                  "rocks/hashids":  "1.0.6-1",

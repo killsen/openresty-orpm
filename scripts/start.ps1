@@ -46,11 +46,11 @@ if ($app_name) {
     Write-Host http://127.0.0.1/ -ForegroundColor Blue
 }
 Write-Host ---------------------------------------------
-Write-Host "path: $root\nginx" -ForegroundColor Red
-Write-Host "conf: $root\nginx\conf\nginx.conf" -ForegroundColor Red
+Write-Host "path: $root/nginx" -ForegroundColor Red
+Write-Host "conf: $root/nginx/conf/nginx.conf" -ForegroundColor Red
 
 # 关闭 nginx 进程
 Get-Process -Name "nginx*" | Stop-Process -PassThru
 
 # 运行 nginx
-Start-Process $nginx_exe -ArgumentList "-p $root\nginx" -NoNewWindow
+Start-Process $nginx_exe -ArgumentList "-p $root/nginx" -NoNewWindow
