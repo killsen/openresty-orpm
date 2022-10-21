@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.2.2"
+$version  = "v2.2.3"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -31,6 +31,7 @@ function show_menu() {
     add_line "install" " bungle/lua-resty-template@v2.0  # 安装指定版本"
     add_line "install" " ledgetech/lua-resty-http"
     add_line "install" " thibaultcha/lua-resty-mlcache"
+    add_line "install" " killsen/openresty-clib@v1.0.0"
     add_line "install" " rocks/luafilesystem"
     add_line
 
