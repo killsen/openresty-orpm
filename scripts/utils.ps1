@@ -27,16 +27,23 @@ function get_orpm_conf() {
 
 }
 
-# 取得 lua-resty 目录
-function get_resty_path($path) {
-    $resty = Get-ChildItem -Path $path -Recurse | Where-Object { $_.Name -eq "resty" }
-    return $resty.FullName
+# 取得子目录
+function get_child_path($parent, $child) {
+    $path = Get-ChildItem -Path $parent -Recurse | Where-Object { $_.Name -eq $child }
+    if ($path) {
+        return $path.FullName.Replace("`\", "`/")
+    }
 }
 
-function get_lua_modules($path, $bit) {
-    $bit_path = Get-ChildItem -Path $path -Recurse | Where-Object { $_.Name -eq $bit }
-    if ($bit_path) {
-        return $bit_path.FullName.Replace("`\", "`/") + "/lua_modules"
+# 取得 lua-resty 目录
+function get_resty_path($parent) {
+    get_child_path $parent "resty"
+}
+
+function get_lua_modules($parent, $bit) {
+    $path = get_child_path $parent $bit
+    if ($path) {
+        get_child_path $path "lua_modules"
     }
 }
 

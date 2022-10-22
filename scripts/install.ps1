@@ -70,16 +70,17 @@ function install( $author_lib_ver ) {
         if (-not $rocks) { return }
         try {
             Write-Host "$author/$lib" -ForegroundColor Yellow -NoNewline
-            $ok = $false
-            & $rocks install "$lib" | ForEach-Object {
-                if ($_ -match "$lib (([\w-.]+)) is now installed in") {
+            $is_installed = $false
+            $logs = & $rocks install "$lib"
+            foreach ($log in $logs) {
+                if ($log -match "$lib (([\w-.]+)) is now installed in") {
                     $ver = $Matches[1]
                     Write-Host "@$ver" -ForegroundColor Blue
                     set_lib_ver $author $lib $ver
-                    $ok = $true
+                    $is_installed = $true
                 }
             }
-            if (-not $ok) {
+            if (-not $is_installed) {
                 Write-Host " (安装失败) " -ForegroundColor Red
             }
         } catch {}
@@ -110,12 +111,15 @@ function install( $author_lib_ver ) {
     $ok = download_expand $url $file $temp $true
     if (-not $ok) { return }
 
+    $is_installed = $false
+
     # 复制 resty
     $resty = get_resty_path $temp
     if ($resty) {
         $dist = "$root/lua_modules/resty"
         make_path $dist
         Copy-Item -Path $resty/* -Destination $dist -Recurse -Force
+        $is_installed = $true
     }
 
     # 复制 32bit 及 64bit 预编译 clib
@@ -131,9 +135,25 @@ function install( $author_lib_ver ) {
 
         Copy-Item -Path $lua_modules/clib/* -Destination $clib -Recurse -Force
         Copy-Item -Path $lua_modules/lua/*  -Destination $lua  -Recurse -Force
+
+        $is_installed = $true
     }
 
-    # 修改版本
-    set_lib_ver $author $lib $ver
+    if (-not $is_installed) {
+        $lib_path = get_child_path $temp "lib"
+        if ($lib_path) {
+            $dist32 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist32
+            $dist64 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist64
+            Copy-Item -Path $lib_path/* -Destination $dist32 -Recurse -Force
+            Copy-Item -Path $lib_path/* -Destination $dist64 -Recurse -Force
+            $is_installed = $true
+        }
+    }
+
+    if ($is_installed) {
+        set_lib_ver $author $lib $ver  # 修改版本
+    } else {
+        Write-Host "未检出到以下目录 lib, resty, 32bit, 64bit" -ForegroundColor Red
+    }
 
 }
