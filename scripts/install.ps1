@@ -111,49 +111,53 @@ function install( $author_lib_ver ) {
     $ok = download_expand $url $file $temp $true
     if (-not $ok) { return }
 
-    $is_installed = $false
-
-    # 复制 resty
-    $resty = get_resty_path $temp
-    if ($resty) {
-        $dist = "$root/lua_modules/resty"
-        make_path $dist
-        Copy-Item -Path $resty/* -Destination $dist -Recurse -Force
-        $is_installed = $true
+    # 复制 lua_types 目录
+    $lua_types = get_child_path $temp "lua_types"
+    if ($lua_types) {
+        $dist = "$root/lua_types"; make_path $dist
+        Copy-Item -Path $lua_types/* -Destination $dist -Recurse -Force
+        set_lib_ver $author $lib $ver  # 修改版本
+        return
     }
+
+    $is_installed = $false
 
     # 复制 32bit 及 64bit 预编译 clib
     foreach ($bit in ("32bit", "64bit")) {
         $lua_modules = get_lua_modules $temp $bit
         if (-not $lua_modules) { continue }
-
-        $clib = "$root/.rocks/$bit/lua_modules/clib"
-        $lua  = "$root/.rocks/$bit/lua_modules/lua"
-
-        make_path $clib
-        make_path $lua
-
+        $clib = "$root/.rocks/$bit/lua_modules/clib"; make_path $clib
+        $lua  = "$root/.rocks/$bit/lua_modules/lua" ; make_path $lua
         Copy-Item -Path $lua_modules/clib/* -Destination $clib -Recurse -Force
         Copy-Item -Path $lua_modules/lua/*  -Destination $lua  -Recurse -Force
-
         $is_installed = $true
-    }
-
-    if (-not $is_installed) {
-        $lib_path = get_child_path $temp "lib"
-        if ($lib_path) {
-            $dist32 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist32
-            $dist64 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist64
-            Copy-Item -Path $lib_path/* -Destination $dist32 -Recurse -Force
-            Copy-Item -Path $lib_path/* -Destination $dist64 -Recurse -Force
-            $is_installed = $true
-        }
     }
 
     if ($is_installed) {
         set_lib_ver $author $lib $ver  # 修改版本
-    } else {
-        Write-Host "未检出到以下目录 lib, resty, 32bit, 64bit" -ForegroundColor Red
+        return
     }
+
+    # 复制 resty 目录
+    $resty = get_resty_path $temp
+    if ($resty) {
+        $dist = "$root/lua_modules/resty"; make_path $dist
+        Copy-Item -Path $resty/* -Destination $dist -Recurse -Force
+        set_lib_ver $author $lib $ver  # 修改版本
+        return
+    }
+
+    # 复制 lib 目录
+    $lib_path = get_child_path $temp "lib"
+    if ($lib_path) {
+        $dist32 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist32
+        $dist64 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist64
+        Copy-Item -Path $lib_path/* -Destination $dist32 -Recurse -Force
+        Copy-Item -Path $lib_path/* -Destination $dist64 -Recurse -Force
+        set_lib_ver $author $lib $ver  # 修改版本
+        return
+    }
+
+    Write-Host "未检出到以下目录 lib, resty, 32bit, 64bit" -ForegroundColor Red
 
 }

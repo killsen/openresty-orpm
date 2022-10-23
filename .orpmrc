@@ -18,6 +18,7 @@
                  "openresty/lua-resty-balancer":  "v0.04",
                  "gui/lua-resty-mail":  "v1.0.2",
                  "hamishforbes/lua-ffi-zlib":  "v0.5",
+                 "killsen/openresty-lua-types":  "v0.0.1",
                  "killsen/openresty-clib":  "v1.0.0",
                  "killsen/lua-resty-iconv":  "v0.2.1",
                  "rocks/luafilesystem":  "1.8.0-1",
