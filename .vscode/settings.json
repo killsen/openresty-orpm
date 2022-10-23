@@ -12,6 +12,7 @@
         "*.luacheckrc": "lua",
         "*.lua.api": "lua",
         ".orpmrc": "json",
+        "*.api": "lua",
     },
 
     "workbench.tree.indent": 22,

@@ -1,6 +1,5 @@
 .rocks
 lua_modules
+lua_types
 nginx/temp
 nginx/logs
-nginx/lua/jit
-nginx/lualib

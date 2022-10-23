@@ -1,6 +1,7 @@
 _bk
 .rocks
 lua_modules
+lua_types
 /nginx
 /my-app
 *.zip

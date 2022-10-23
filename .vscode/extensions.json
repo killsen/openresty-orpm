@@ -1,6 +1,7 @@
 {
     "recommendations": [
-        "EditorConfig.EditorConfig",
-        "ms-vscode.PowerShell"
+        "killsen.openresty-vsce",
+        "editorconfig.editorconfig",
+        "hangxingliu.vscode-nginx-conf-hint"
     ]
 }
