@@ -25,7 +25,6 @@ function install_openresty() {
         $bit = "32"
     }
 
-    $nginx              = "$root/nginx"
     $openresty          = "$orpm/openresty"
     $openresty_bit      = "openresty-$ver-win$bit"
     $nginx_exe          = "$openresty/$openresty_bit/nginx.exe"
@@ -45,19 +44,9 @@ function install_openresty() {
         }
     }
 
-    make_path $nginx
-    make_path $nginx/conf
-    make_path $nginx/temp
-    make_path $nginx/logs
-
     make_path $root/lua_modules
     make_link $root/lua_modules/lualib      $lualib_link
     make_link $root/lua_modules/lualib/jit  $luajit_link
-
-    if (-not (Test-Path "$nginx/conf/nginx.conf")) {
-        $conf = Get-Content "$PSScriptRoot/../template/default/nginx/conf/nginx.conf"
-        Set-Content "$nginx/conf/nginx.conf" $conf
-    }
 
     return "$openresty/$openresty_bit"
 

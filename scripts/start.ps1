@@ -30,19 +30,31 @@ if (-not $openresty) { return }
 $luarocks_exe = install_luarocks
 if (-not $luarocks_exe) { return }
 
+$nginx = "$root/nginx"
+make_path $nginx
+make_path $nginx/conf
+make_path $nginx/temp
+make_path $nginx/logs
+
+if (-not (Test-Path "$nginx/conf/nginx.conf")) {
+    $conf = Get-Content "$PSScriptRoot/../template/nginx.conf"
+    Set-Content "$nginx/conf/nginx.conf" $conf
+}
+
 $nginx_exe = "$openresty/nginx.exe"
 
 Write-Host ---------------------------------------------
 & $nginx_exe -v
 Write-Host ---------------------------------------------
 
+Write-Host http://127.0.0.1/ -ForegroundColor Blue
+
 $app_name = $conf.app_name
 if ($app_name) {
     Write-Host http://127.0.0.1/$app_name/help  -ForegroundColor Blue
     Write-Host http://127.0.0.1/$app_name/_.gen_api_code.lpage -ForegroundColor Blue
-} else {
-    Write-Host http://127.0.0.1/ -ForegroundColor Blue
 }
+
 Write-Host ---------------------------------------------
 Write-Host "path: $root/nginx" -ForegroundColor Red
 Write-Host "conf: $root/nginx/conf/nginx.conf" -ForegroundColor Red
