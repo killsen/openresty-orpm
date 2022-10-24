@@ -7,13 +7,14 @@
     "libs":  {
                  "killsen/openresty-lua-types":  "v0.0.1",
                  "killsen/openresty-clib":  "v1.0.0",
+                 "killsen/openresty-appx":  "v0.1.0",
+                 "killsen/lua-resty-iconv":  "v0.2.1",
+                 "guosiu/lua-resty-date":  "v2.2",
                  "bungle/lua-resty-prettycjson":  "v1.6",
                  "bungle/lua-resty-template":  "v2.0",
                  "thibaultcha/lua-resty-mlcache":  "2.6.0",
                  "hamishforbes/lua-resty-iputils":  "v0.3.0",
                  "ledgetech/lua-resty-http":  "v0.16.1",
-                 "guosiu/lua-resty-date":  "v2.2",
-                 "killsen/lua-resty-iconv":  "v0.2.1",
                  "agentzh/lua-resty-multipart-parser":  "master",
                  "golgote/lua-resty-info":  "master"
              }
