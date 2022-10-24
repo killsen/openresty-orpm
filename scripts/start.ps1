@@ -2,29 +2,27 @@
 . $PSScriptRoot\utils.ps1
 . $PSScriptRoot\install_openresty.ps1
 . $PSScriptRoot\install_luarocks.ps1
+. $PSScriptRoot\install.ps1
 
-# 清屏
-Clear-Host
+$root = get_root_path
+$orpm = get_orpm_path
+$conf = get_orpm_conf
+
+Write-Host
+
+if ($root) {
+    Write-Host "workspace: " -ForegroundColor Yellow -NoNewline
+    Write-Host "$root"       -ForegroundColor Blue
+    Write-Host "orpm home: " -ForegroundColor Yellow -NoNewline
+    Write-Host "$orpm"       -ForegroundColor Blue
+} else {
+    Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
+    Write-Host
+    return
+}
 
 # 关闭 nginx 进程
 Get-Process -Name "nginx*" | Stop-Process
-
-$root = get_root_path
-
-if ($root) {
-    Write-Host "root: $root" -ForegroundColor Red
-} else {
-    Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
-    return
-}
-
-try {
-    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
-    if (-not $conf) { $conf = @{} }
-} catch {
-    Write-Host ".orpmrc 文件读取失败" -ForegroundColor Red
-    return
-}
 
 $openresty = install_openresty
 if (-not $openresty) { return }
@@ -48,9 +46,7 @@ if ($app_name) {
 Write-Host ---------------------------------------------
 Write-Host "path: $root/nginx" -ForegroundColor Red
 Write-Host "conf: $root/nginx/conf/nginx.conf" -ForegroundColor Red
-
-# 关闭 nginx 进程
-Get-Process -Name "nginx*" | Stop-Process -PassThru
+Write-Host
 
 # 运行 nginx
 Start-Process $nginx_exe -ArgumentList "-p $root/nginx" -NoNewWindow

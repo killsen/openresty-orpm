@@ -9,7 +9,6 @@ $root = get_root_path
 $orpm = get_orpm_path
 $conf = get_orpm_conf
 
-Clear-Host
 Write-Host
 
 if ($root) {

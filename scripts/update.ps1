@@ -3,24 +3,31 @@
 . $PSScriptRoot\install.ps1
 
 $root = get_root_path
+$orpm = get_orpm_path
+$conf = get_orpm_conf
+
+Write-Host
 
 if ($root) {
-    Write-Host "root: $root" -ForegroundColor Red
+    Write-Host "workspace: " -ForegroundColor Yellow -NoNewline
+    Write-Host "$root"       -ForegroundColor Blue
+    Write-Host "orpm home: " -ForegroundColor Yellow -NoNewline
+    Write-Host "$orpm"       -ForegroundColor Blue
 } else {
     Write-Host ".orpmrc 文件不存在" -ForegroundColor Red
+    Write-Host
     return
 }
 
-try {
-    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
-} catch {
-    Write-Host ".orpmrc 文件读取失败" -ForegroundColor Red
-    return
-}
+# 关闭 nginx 进程
+Get-Process -Name "nginx*" | Stop-Process -PassThru
+
+Write-Host
+Write-Host "update libs: " -ForegroundColor Yellow
+Write-Host "-------------------------------------------------"
 
 if (-not $conf.libs) {
-    Write-Host "尚未安装 lua-resty-libs" -ForegroundColor Red
-    return
+    Write-Host "no libs installed" -ForegroundColor Blue
 }
 
 function update_lib_ver($lib, $ver) {
@@ -49,7 +56,15 @@ function update_lib_ver($lib, $ver) {
 
 foreach($lib in $conf.libs.PSObject.Properties)
 {
-    if (-not ($lib.Value.StartsWith("#")) ) {
-        update_lib_ver $lib.Name $lib.Value
-    }
+    $name, $ver = $lib.Name, $lib.Value
+
+    if ( $name.StartsWith("rocks") ) { continue }
+    if ( $name.StartsWith("#") ) { continue }
+    if ( $ver.StartsWith("#") ) { continue }
+
+    update_lib_ver $name $ver
+
 }
+
+Write-Host "-------------------------------------------------"
+Write-Host
