@@ -63,31 +63,27 @@ function make_link($path, $link) {
 }
 
 # 下载并解压
-function download_expand($url, $file, $path, $remove) {
+function download_expand($Uri, $OutFile, $OutPath, $Force) {
 
-    if ( -not (Test-Path $file) ) {
+    if (-not (Test-Path $OutFile) -or $Force) {
         try{
-            # wget.exe "$url" -O "$file"                            # wget下载
-            Invoke-WebRequest -Uri $url -OutFile $file              # 下载文件
+            # wget.exe "$Uri" -O "$OutFile"                            # wget下载
+            Invoke-WebRequest -Uri $Uri -OutFile $OutFile              # 下载文件
         } catch {
             Write-Host "下载文件失败: " -ForegroundColor Yellow -NoNewline
-            Write-Host "$url" -ForegroundColor Red
+            Write-Host "$Uri" -ForegroundColor Red
             return
         }
     }
 
-    if ($remove -and (Test-Path $path)) {
-        Remove-Item -Path $path -Recurse -Force -ErrorAction Stop   # 删除目录
-    }
-
     try{
-        7z.exe x "$file" -o"$path" -y -aoa  | Out-Null                  # 7zip解压
+        7z.exe x "$OutFile" -o"$OutPath" -y -aoa  | Out-Null                  # 7zip解压
     } catch {
         try {
-            Expand-Archive -Path $file -DestinationPath $path -Force    # 解压文件
+            Expand-Archive -Path $OutFile -DestinationPath $OutPath -Force    # 解压文件
         } catch {
             Write-Host "解压文件失败: " -ForegroundColor Yellow -NoNewline
-            Write-Host "$file" -ForegroundColor Red
+            Write-Host "$OutFile" -ForegroundColor Red
             return
         }
     }

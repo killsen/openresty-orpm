@@ -33,6 +33,12 @@ if (-not $conf.libs) {
 function update_lib_ver($lib, $ver) {
     Write-Host "$lib@$ver" -ForegroundColor Yellow -NoNewline
 
+    if ($ver -eq "main" -or $ver -eq "master") {
+        Write-Host " >> " -ForegroundColor Red -NoNewline
+        install "$lib@$ver"
+        return
+    }
+
     try {
         $url   = "https://github.com/$lib/tags"
         $regx  = "archive/refs/tags/(v?[\d.]+)\.zip"

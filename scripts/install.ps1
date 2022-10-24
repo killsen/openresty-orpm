@@ -99,16 +99,28 @@ function install( $author_lib_ver ) {
 
     Write-Host "@$ver" -ForegroundColor Blue
 
-    $url    = "https://github.com/$author/$lib/archive/refs/tags/$ver.zip"
+    if ($ver -eq "main" -or $ver -eq "master") {
+        $url   = "https://github.com/$author/$lib/archive/refs/heads/$ver.zip"
+        $force = $true
+    } else {
+        $url   = "https://github.com/$author/$lib/archive/refs/tags/$ver.zip"
+        $force = $false
+    }
+
     $path   = "$orpm/libs/$author/$lib"
     $file   = "$path/$ver.zip"
     $temp   = "$path/$ver"
+
+    if (Test-Path $temp) {
+        # 删除临时目录
+        Remove-Item -Path $temp -Recurse -Force -ErrorAction Stop
+    }
 
     make_path $path
     make_path $temp
 
     # 下载文件并解压
-    $ok = download_expand $url $file $temp $true
+    $ok = download_expand $url $file $temp $force
     if (-not $ok) { return }
 
     # 复制 lua_types 目录
