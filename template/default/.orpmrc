@@ -9,7 +9,7 @@
                  "thibaultcha/lua-resty-mlcache":  "2.6.0",
                  "fffonion/lua-resty-acme":  "0.8.1",
                  "hamishforbes/lua-resty-iputils":  "v0.3.0",
-                 "fffonion/lua-resty-openssl":  "0.8.13",
+                 "fffonion/lua-resty-openssl":  "0.8.14",
                  "bungle/lua-resty-template":  "v2.0",
                  "tokers/lua-resty-requests":  "v0.7.3",
                  "tokers/lua-resty-socket":  "1.0.1",

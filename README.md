@@ -18,7 +18,7 @@ scoop install dev/orpm
 
 ```PowerShell
 
-orpm version  # 版本 v2.2.6
+orpm version  # 版本 v2.2.7
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm init     # 创建 .orpmrc 配置文件
@@ -34,14 +34,9 @@ orpm rocks    # 执行 luarocks
 ## 安装 libs
 
 ```PowerShell
+orpm install  killsen/openresty-lua-types
+orpm install  killsen/openresty-clib
 
 orpm install  bungle/lua-resty-template       # 安装最新版本
 orpm install  bungle/lua-resty-template@v2.0  # 安装指定版本
-
-orpm install  ledgetech/lua-resty-http
-orpm install  thibaultcha/lua-resty-mlcache
-
-orpm install  killsen/openresty-clib@v1.0.0
-orpm install  rocks/luafilesystem
-
 ```

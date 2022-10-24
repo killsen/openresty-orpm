@@ -14,7 +14,7 @@ function add_line($p1, $p2) {
 
 function show_menu() {
 
-    Clear-Host
+    Write-Host
 
     add_line "version" " # 版本 $version"
     add_line "homepage" "# $homepage"
@@ -27,14 +27,13 @@ function show_menu() {
     add_line "install" " # 安装 libs"
     add_line "rocks" "   # 执行 luarocks"
     add_line
+    add_line "install" " killsen/openresty-lua-types"
+    add_line "install" " killsen/openresty-clib"
     add_line "install" " bungle/lua-resty-template       # 安装最新版本"
     add_line "install" " bungle/lua-resty-template@v2.0  # 安装指定版本"
-    add_line "install" " ledgetech/lua-resty-http"
-    add_line "install" " thibaultcha/lua-resty-mlcache"
-    add_line "install" " killsen/openresty-clib@v1.0.0"
-    add_line "install" " rocks/luafilesystem"
     add_line
 
+    Write-Host
 }
 
 switch ($args[0]) {
