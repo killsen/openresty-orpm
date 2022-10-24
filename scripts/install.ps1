@@ -150,6 +150,33 @@ function install( $author_lib_ver ) {
         return
     }
 
+    # 安装 openresty-appx 框架
+    $lua_modules = get_child_path $temp "lua_modules"
+    if ($lua_modules) {
+        $temp_appx  = "$lua_modules/app"
+        $temp_nginx = get_child_path $temp "nginx"
+        $dist_appx  = "$root/lua_modules/app"
+        $dist_nginx = "$root/nginx"
+
+        # 存在 lua_modules/app 及 nginx 目录
+        if ((Test-Path $temp_appx )-and $temp_nginx) {
+            if (Test-Path $dist_appx) {
+                Remove-Item -Path $dist_appx -Recurse -Force -ErrorAction Stop
+            }
+            make_path $dist_appx
+            Copy-Item -Path $temp_appx/* -Destination $dist_appx -Recurse -Force
+
+            if (-not (Test-Path $dist_nginx)) {
+                make_path $dist_nginx
+                Copy-Item -Path $temp_nginx/* -Destination $dist_nginx -Recurse -Force
+            }
+
+            set_lib_ver $author $lib $ver  # 修改版本
+            return
+        }
+
+    }
+
     # 复制 resty 目录
     $resty = get_resty_path $temp
     if ($resty) {

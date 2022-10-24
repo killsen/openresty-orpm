@@ -2,6 +2,7 @@
     "recommendations": [
         "killsen.openresty-vsce",
         "editorconfig.editorconfig",
-        "hangxingliu.vscode-nginx-conf-hint"
+        "dwenegar.vscode-luacheck",
+        // "hangxingliu.vscode-nginx-conf-hint"
     ]
 }
