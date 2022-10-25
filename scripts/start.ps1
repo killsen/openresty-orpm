@@ -24,12 +24,14 @@ if ($root) {
 # 关闭 nginx 进程
 Get-Process -Name "nginx*" | Stop-Process
 
+# 初始化 .rocks 目录
+init_rocks_path
+
+# 安装 openresty
 $openresty = install_openresty
 if (-not $openresty) { return }
 
-$luarocks_exe = install_luarocks
-if (-not $luarocks_exe) { return }
-
+# 初始化 nginx 目录
 $nginx = "$root/nginx"
 make_path $nginx
 make_path $nginx/conf

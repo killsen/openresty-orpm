@@ -25,23 +25,26 @@ if ($root) {
 # 关闭 nginx 进程
 Get-Process -Name "nginx*" | Stop-Process -PassThru
 
+# 初始化 .rocks 目录
+init_rocks_path
+
 Write-Host
 Write-Host "install openresty: " -ForegroundColor Yellow
 $openresty_win32 = install_openresty
 if (-not $openresty_win32) { return }
 Write-Host $openresty_win32 -ForegroundColor Blue
 
-Write-Host
-Write-Host "install mingw: " -ForegroundColor Yellow
-$mingw32_bin = install_mingw
-if (-not $mingw32_bin) { return }
-Write-Host $mingw32_bin -ForegroundColor Blue
+# Write-Host
+# Write-Host "install mingw: " -ForegroundColor Yellow
+# $mingw32_bin = install_mingw
+# if (-not $mingw32_bin) { return }
+# Write-Host $mingw32_bin -ForegroundColor Blue
 
-Write-Host
-Write-Host "install luarocks: " -ForegroundColor Yellow
-$luarocks_exe = install_luarocks
-if (-not $luarocks_exe) { return }
-Write-Host $luarocks_exe -ForegroundColor Blue
+# Write-Host
+# Write-Host "install luarocks: " -ForegroundColor Yellow
+# $luarocks_exe = install_luarocks
+# if (-not $luarocks_exe) { return }
+# Write-Host $luarocks_exe -ForegroundColor Blue
 
 Write-Host
 Write-Host "install libs: " -ForegroundColor Yellow

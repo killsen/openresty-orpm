@@ -14,6 +14,8 @@ function install_luarocks() {
         return
     }
 
+    init_rocks_path  # 初始化 .rocks 目录
+
     $ver = $conf.luarocks_ver
     if (-not $ver) { $ver = "3.8.0" }
 
@@ -48,14 +50,6 @@ function install_luarocks() {
     if (-not $mingw_bin) { return }
 
     $rocks_path = "$root/.rocks/$bit" + "bit"
-    make_path "$rocks_path"
-
-    make_path "$rocks_path/lua_modules"
-    make_path "$rocks_path/lua_modules/clib"
-    make_path "$rocks_path/lua_modules/lua"
-
-    make_link "$root/lua_modules/clib" "$rocks_path/lua_modules/clib"
-    make_link "$root/lua_modules/lua"  "$rocks_path/lua_modules/lua"
 
     $luarocks_config = "$rocks_path/config.lua"
     $ENV:LUAROCKS_CONFIG = "$luarocks_config"

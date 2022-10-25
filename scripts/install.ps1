@@ -51,6 +51,9 @@ function install( $author_lib_ver ) {
         return
     }
 
+    # 初始化 .rocks 目录
+    init_rocks_path
+
     $author_lib_ver = $author_lib_ver.ToLower()
     $pattern = "(([\w-]+)/)?([\w-]+)(@([\w-.]+))?"
 

@@ -27,6 +27,45 @@ function get_orpm_conf() {
 
 }
 
+# 初始化 .rocks 目录
+function init_rocks_path() {
+
+    $root = get_root_path
+    $conf = get_orpm_conf
+
+    if (-not $root) { return }
+
+    make_path "$root/lua_modules"
+    # make_path "$root/lua_modules/resty"
+
+    # make_path "$root/lua_types"
+    # make_path "$root/lua_types/luajit"
+    # make_path "$root/lua_types/lualib"
+    # make_path "$root/lua_types/ngx"
+    # make_path "$root/lua_types/resty"
+
+    make_path "$root/.rocks/32bit"
+    # make_path "$root/.rocks/32bit/bin"
+    make_path "$root/.rocks/32bit/lua_modules"
+    make_path "$root/.rocks/32bit/lua_modules/clib"
+    make_path "$root/.rocks/32bit/lua_modules/lua"
+
+    make_path "$root/.rocks/64bit"
+    # make_path "$root/.rocks/64bit/bin"
+    make_path "$root/.rocks/64bit/lua_modules"
+    make_path "$root/.rocks/64bit/lua_modules/clib"
+    make_path "$root/.rocks/64bit/lua_modules/lua"
+
+    if ($conf.arch -eq "64bit" -or $conf.arch -eq "64") {
+        make_link "$root/lua_modules/clib" "$root/.rocks/64bit/lua_modules/clib"
+        make_link "$root/lua_modules/lua"  "$root/.rocks/64bit/lua_modules/lua"
+    } else {
+        make_link "$root/lua_modules/clib" "$root/.rocks/32bit/lua_modules/clib"
+        make_link "$root/lua_modules/lua"  "$root/.rocks/32bit/lua_modules/lua"
+    }
+
+}
+
 # 取得子目录
 function get_child_path($parent, $child) {
     $path = Get-ChildItem -Path $parent -Recurse | Where-Object { $_.Name -eq $child }
