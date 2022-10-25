@@ -1,0 +1,111 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "licenseIdentifiers": {
+            "type": "string",
+            "description": "License identifier based on SPDX License List https://spdx.org/licenses/",
+            "examples": [
+                "Apache-2.0",
+                "BSD-3-Clause",
+                "Freeware",
+                "GPL-2.0-only",
+                "GPL-2.0-or-later",
+                "GPL-3.0-only",
+                "GPL-3.0-or-later",
+                "ISC",
+                "LGPL-2.0-only",
+                "LGPL-2.0-or-later",
+                "LGPL-2.1-only",
+                "LGPL-2.1-or-later",
+                "LGPL-3.0-only",
+                "LGPL-3.0-or-later",
+                "MIT",
+                "MS-PL",
+                "Proprietary",
+                "Public Domain",
+                "Shareware",
+                "Unlicense"
+            ]
+        },
+        "license": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/licenseIdentifiers"
+                },
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "url": {
+                            "format": "uri",
+                            "type": "string"
+                        },
+                        "identifier": {
+                            "$ref": "#/definitions/licenseIdentifiers"
+                        }
+                    },
+                    "required": [
+                        "identifier"
+                    ],
+                    "type": "object"
+                }
+            ]
+        }
+    },
+    "properties": {
+        "homepage": {
+            "title": "项目主页",
+            "format": "uri",
+            "type": "string"
+        },
+        "license": {
+            "title": "许可证",
+            "$ref": "#/definitions/license"
+        },
+        "version": {
+            "title": "版本号",
+            "pattern": "^\\d[\\d\\.]+\\d$",
+            "type": "string"
+        },
+        "app_name": {
+            "title": "应用名称",
+            "pattern": "^\\w*$",
+            "type": "string"
+        },
+        "openresty_ver": {
+            "title": "OpenResty® 是一个基于 Nginx 与 LuaJIT 的高性能 Web 平台",
+            "description": "https://openresty.org/",
+            "pattern": "^\\d[\\d\\.]+\\d$",
+            "type": "string"
+        },
+        "luarocks_ver": {
+            "title": "LuaRocks 是使用最广泛的 Lua 模块管理工具",
+            "description": "https://luarocks.org/",
+            "pattern": "^\\d[\\d\\.]+\\d$",
+            "type": "string"
+        },
+        "mingw_ver": {
+            "title": "MinGW 就是 GCC 的 Windows 版本",
+            "description": "https://www.mingw-w64.org/",
+            "pattern": "^\\d[\\d\\.]+\\d$",
+            "type": "string"
+        },
+        "arch": {
+            "title": "操作系统架构 32bit 或 64bit",
+            "type": "string",
+            "examples": [
+                "32bit",
+                "64bit"
+            ]
+        },
+        "libs": {
+            "title": "Lua 模块",
+            "type": "object"
+        }
+    },
+    "required": [
+        "libs"
+    ],
+    "title": "OpenResty Package Manifest Schema",
+    "type": "object"
+}

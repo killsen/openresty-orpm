@@ -1,9 +1,12 @@
 {
-    "app_name":  "demo",
+    "version": "0.0.1",
+    "license": "MIT",
+    "homepage": "https://github.com/",
+    "app_name":  "",
     "openresty_ver":  "1.21.4.1",
     "luarocks_ver":  "3.9.1",
     "mingw_ver":  "12.2.0",
-    "arch":  "64bit",
+    "arch": "64bit",
     "libs":  {
                  "killsen/openresty-lua-types":  "",
                  "killsen/openresty-clib":  "",

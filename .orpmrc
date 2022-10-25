@@ -1,9 +1,12 @@
 {
+    "version": "2.3.4",
+    "license": "MIT",
+    "homepage": "https://github.com/killsen/openresty-orpm",
     "app_name":  "demo",
     "openresty_ver":  "1.21.4.1",
     "luarocks_ver":  "3.9.1",
     "mingw_ver":  "12.2.0",
-    "arch":  "32bit",
+    "arch": "64bit",
     "libs":  {
                  "killsen/openresty-lua-types":  "v0.0.1",
                  "killsen/openresty-clib":  "v1.0.0",
