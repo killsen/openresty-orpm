@@ -189,17 +189,20 @@ function install( $author_lib_ver ) {
         return
     }
 
-    # 复制 lib 目录
-    $lib_path = get_child_path $temp "lib"
-    if ($lib_path) {
+    # 复制 lua 或者 lib 目录
+    foreach ($src in ("lua", "lib")) {
+        $src_path = get_child_path $temp $src
+        if (-not $src_path) { continue }
+
         $dist32 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist32
-        $dist64 = "$root/.rocks/32bit/lua_modules/lua"; make_path $dist64
-        Copy-Item -Path $lib_path/* -Destination $dist32 -Recurse -Force
-        Copy-Item -Path $lib_path/* -Destination $dist64 -Recurse -Force
+        $dist64 = "$root/.rocks/64bit/lua_modules/lua"; make_path $dist64
+        Copy-Item -Path $src_path/* -Destination $dist32 -Recurse -Force
+        Copy-Item -Path $src_path/* -Destination $dist64 -Recurse -Force
+
         set_lib_ver $author $lib $ver  # 修改版本
         return
     }
 
-    Write-Host "未检出到以下目录 lib, resty, 32bit, 64bit" -ForegroundColor Red
+    Write-Host "未检出到以下目录 lua, lib, resty, 32bit, 64bit" -ForegroundColor Red
 
 }

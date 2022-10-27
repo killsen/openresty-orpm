@@ -67,10 +67,19 @@ function init_rocks_path() {
 }
 
 # 取得子目录
-function get_child_path($parent, $child) {
-    $path = Get-ChildItem -Path $parent -Recurse | Where-Object { $_.Name -eq $child }
-    if ($path) {
-        return $path.FullName.Replace("`\", "`/")
+function get_child_path($parent, $name) {
+
+    $item = Get-ChildItem -Path $parent -Directory | Where-Object { $_.Name -eq $name }
+    if ($item) {
+        $path = $item.FullName.Replace("`\", "`/")
+        return $path
+    }
+
+    foreach ($item in (Get-ChildItem -Path $parent -Directory)) {
+        $path = get_child_path $item.FullName $name
+        if ($path) {
+            return $path
+        }
     }
 }
 
