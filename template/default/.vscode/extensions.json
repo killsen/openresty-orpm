@@ -1,8 +1,9 @@
 {
     "recommendations": [
         "killsen.openresty-vsce",
+        "killsen.openresty-nginx-conf",
         "editorconfig.editorconfig",
         "dwenegar.vscode-luacheck",
-        // "hangxingliu.vscode-nginx-conf-hint"
+        "tangzx.emmylua"
     ]
 }

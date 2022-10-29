@@ -8,11 +8,13 @@
     "mingw_ver":  "12.2.0",
     "arch":  "64bit",
     "libs":  {
-                 "killsen/openresty-clib":  "",
-                 "killsen/openresty-appx":  "",
-                 "killsen/openresty-lua-types":  "",
+                 "killsen/openresty-clib":  "master",
+                 "killsen/openresty-appx":  "master",
+                 "killsen/openresty-lua-types":  "master",
+                 "guosiu/lua-resty-date":  "master",
+                 "agentzh/lua-resty-multipart-parser":  "master",
+                 "golgote/lua-resty-info":  "master",
                  "lunarmodules/penlight":  "",
-                 "guosiu/lua-resty-date":  "",
                  "bungle/lua-resty-prettycjson":  "",
                  "bungle/lua-resty-template":  "",
                  "bungle/lua-resty-session":  "",
@@ -20,8 +22,6 @@
                  "hamishforbes/lua-resty-iputils":  "",
                  "hamishforbes/lua-ffi-zlib":  "",
                  "ledgetech/lua-resty-http":  "",
-                 "woothee/lua-resty-woothee":  "",
-                 "agentzh/lua-resty-multipart-parser":  "master",
-                 "golgote/lua-resty-info":  "master"
+                 "woothee/lua-resty-woothee":  ""
              }
 }
