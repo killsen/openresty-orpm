@@ -50,21 +50,32 @@ Write-Host
 Write-Host "install libs: " -ForegroundColor Yellow
 Write-Host "-------------------------------------------------"
 
-if (-not $conf.libs) {
+$libs = $conf.libs
+
+if (-not $libs) {
     Write-Host "no libs installed" -ForegroundColor Blue
 }
 
-foreach($lib in $conf.libs.PSObject.Properties)
+# 清空已安装列表
+$Global:INSTLLED = @{}
+
+foreach($item in $libs.PSObject.Properties)
 {
-    $name, $ver = $lib.Name, $lib.Value
+    $author_lib, $ver = $item.Name, $item.Value
+    $pattern = "([\w-]+)/([\w-]+)"
 
-    if ( $name.StartsWith("rocks") ) { continue }
-    if ( $name.StartsWith("#") ) { continue }
-    if ( $ver.StartsWith("#") ) { continue }
+    if (-not ($author_lib -match $pattern)) { continue }
+    $author, $lib = $Matches[1], $Matches[2]
 
-    install "$name@$ver"
+    if ( $author -eq "rocks" ) { continue }
+    if ($ver.IndexOf("#") -ne -1 ) { continue }
+
+    install "$author_lib@$ver"
 
 }
+
+# 清空已安装列表
+$Global:INSTLLED = @{}
 
 Write-Host "-------------------------------------------------"
 Write-Host

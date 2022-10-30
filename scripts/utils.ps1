@@ -27,6 +27,16 @@ function get_orpm_conf() {
 
 }
 
+# 取得包的配置信息
+function get_lib_conf($path) {
+
+    $file = get_child_file $path ".orpmrc"
+    if ($file) {
+        Get-Content $file | ConvertFrom-JSON
+    }
+
+}
+
 # 初始化 .rocks 目录
 function init_rocks_path() {
 
@@ -64,6 +74,23 @@ function init_rocks_path() {
         make_link "$root/lua_modules/lua"  "$root/.rocks/32bit/lua_modules/lua"
     }
 
+}
+
+# 查找文件
+function get_child_file($parent, $name) {
+
+    $item = Get-ChildItem -Path $parent -File | Where-Object { $_.Name -eq $name }
+    if ($item) {
+        $file = $item.FullName.Replace("`\", "`/")
+        return $file
+    }
+
+    foreach ($item in (Get-ChildItem -Path $parent -Directory)) {
+        $file = get_child_file $item.FullName $name
+        if ($file) {
+            return $file
+        }
+    }
 }
 
 # 取得子目录

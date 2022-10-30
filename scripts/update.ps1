@@ -26,51 +26,36 @@ Write-Host
 Write-Host "update libs: " -ForegroundColor Yellow
 Write-Host "-------------------------------------------------"
 
-if (-not $conf.libs) {
+$libs = $conf.libs
+
+if (-not $libs) {
     Write-Host "no libs installed" -ForegroundColor Blue
 }
 
-function update_lib_ver($lib, $ver) {
-    Write-Host "$lib@$ver" -ForegroundColor Yellow -NoNewline
+# 清空已安装列表
+$Global:INSTLLED = @{}
+
+foreach($item in $libs.PSObject.Properties)
+{
+    $author_lib, $ver = $item.Name, $item.Value
+    $pattern = "([\w-]+)/([\w-]+)"
+
+    if (-not ($author_lib -match $pattern)) { continue }
+    $author, $lib = $Matches[1], $Matches[2]
+
+    if ( $author -eq "rocks" ) { continue }
+    if ($ver.IndexOf("#") -ne -1 ) { continue }
 
     if ($ver -eq "main" -or $ver -eq "master") {
-        Write-Host " >> " -ForegroundColor Red -NoNewline
-        install "$lib@$ver"
-        return
+        install "$author_lib@$ver"
+    } else {
+        install "$author_lib@$last"
     }
 
-    try {
-        $url   = "https://github.com/$lib/tags"
-        $regx  = "archive/refs/tags/(v?[\d.]+)\.zip"
-        $links = (Invoke-WebRequest -Uri "$url").Links | Where-Object { $_.href -match "$regx" }
-
-        if ($links[0].href -match "$regx") {
-            if ($ver -eq $Matches[1]) {
-                Write-Host " (版本一致) " -ForegroundColor Blue
-            } else {
-                $ver = $Matches[1]
-                Write-Host " >> " -ForegroundColor Red -NoNewline
-                install "$lib@$ver"
-            }
-            return
-        }
-    } catch {}
-
-    Write-Host " (获取版本失败) " -ForegroundColor Red -NoNewline
-    Write-Host "$url"
 }
 
-foreach($lib in $conf.libs.PSObject.Properties)
-{
-    $name, $ver = $lib.Name, $lib.Value
-
-    if ( $name.StartsWith("rocks") ) { continue }
-    if ( $name.StartsWith("#") ) { continue }
-    if ( $ver.StartsWith("#") ) { continue }
-
-    update_lib_ver $name $ver
-
-}
+# 清空已安装列表
+$Global:INSTLLED = @{}
 
 Write-Host "-------------------------------------------------"
 Write-Host
