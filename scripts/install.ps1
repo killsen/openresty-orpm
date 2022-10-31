@@ -4,9 +4,9 @@
 
 # 安装 LuaRocks 库
 function Install-LuaRocksLib() {
-    [Parameter(Position = 0, Mandatory = $true )] $author,
-    [Parameter(Position = 1, Mandatory = $true )] $lib,
-    [Parameter(Position = 2, Mandatory = $false)] $ver,
+    [Parameter(Position = 0, Mandatory = $true )] [string] $author,
+    [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
+    [Parameter(Position = 2, Mandatory = $false)] [string] $ver,
 
     $rocks = install_luarocks
     if (-not $rocks) { return }
@@ -29,14 +29,18 @@ function Install-LuaRocksLib() {
 
 # 安装 Github 库
 function Install-GithubLib() {
-    param (
-        [Parameter(Position = 0, Mandatory = $true )] $author,
-        [Parameter(Position = 1, Mandatory = $true )] $lib,
-        [Parameter(Position = 2, Mandatory = $false)] $ver,
-        [Parameter(Mandatory = $true)] $root,
-        [Parameter(Mandatory = $true)] $orpm
+    Param (
+        [Parameter(Position = 0, Mandatory = $true )] [string] $author,
+        [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
+        [Parameter(Position = 2, Mandatory = $false)] [string] $ver,
+        [Parameter(Mandatory = $true)] [string] $root,
+        [Parameter(Mandatory = $true)] [string] $orpm,
+        [switch] $PeerDeps
     )
 
+    if ($PeerDeps) {
+        Write-Host "  + " -NoNewline
+    }
     Write-Host "$author/$lib" -ForegroundColor Yellow -NoNewline
 
     if (-not $ver -or $ver -eq "last") {
@@ -145,6 +149,9 @@ function Install-GithubLib() {
         return $ver
     }
 
+    if ($PeerDeps) {
+        Write-Host "    " -NoNewline
+    }
     Write-Host "未检出到以下目录 lua, lib, resty, 32bit, 64bit" -ForegroundColor Red
 
 }
@@ -204,20 +211,20 @@ function install( $author_lib_ver ) {
         if ( $ver.IndexOf("#") -ne -1 ) { continue }
         if ( $Global:INSTLLED["$author/$lib"] ) { continue }  # 不重复安装
 
-        $ver = Install-GithubLib $author $lib $ver -root $root -orpm $orpm
+        $ver = Install-GithubLib $author $lib $ver -root $root -orpm $orpm -PeerDeps
         if (-not $ver) { return }
 
         $Global:INSTLLED["$author/$lib"] = $true
-        Set-LibVer $author $lib "$ver"
+        Set-LibVer $author $lib $ver
     }
 
 }
 
 # 获取最新版本
 function Get-LastLibVer() {
-    param (
-        [Parameter(Position = 0, Mandatory = $true)] $author,
-        [Parameter(Position = 1, Mandatory = $true)] $lib
+    Param (
+        [Parameter(Position = 0, Mandatory = $true)] [string] $author,
+        [Parameter(Position = 1, Mandatory = $true)] [string] $lib
     )
     try {
         $url   = "https://github.com/$author/$lib/tags"
@@ -234,7 +241,7 @@ function Set-LibVer() {
     Param (
         [Parameter(Position = 0, Mandatory = $true )] [string] $author,
         [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
-        [Parameter(Position = 2, Mandatory = $false)] [string] $ver
+        [Parameter(Position = 2, Mandatory = $true )] [string] $ver
     )
 
     Start-Sleep -Milliseconds 50  # 延时 50 毫秒, 避免写文件冲突
@@ -245,17 +252,19 @@ function Set-LibVer() {
     $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
     if (-not $conf) { $conf = @{} }
 
-    $old_ver = $conf.libs.("$author/$lib")
-    if ($old_ver -eq "$ver") { return }  # 版本一致退出
+    $key = "$author/$lib"
+
+    $old_ver = $conf.libs.($key)
+    if ($old_ver -eq $ver) { return }  # 版本一致退出
 
     if ( -not $conf.libs ) {
-        $conf | Add-Member "libs" @{ "$author/$lib" = "$ver" } -Force
-
-    } elseif ( $old_ver ) {
-        $conf.libs.("$author/$lib") = "$ver"
-
+        $conf | Add-Member "libs" @{ $key = $ver } -Force
     } else {
-        $conf.libs | Add-Member "$author/$lib" "$ver" -Force
+        try {
+            $conf.libs.($key) = $ver
+        } catch {
+            $conf.libs | Add-Member $key $ver -Force
+        }
     }
 
     $conf | ConvertTo-Json | Set-Content "$root/.orpmrc" | Out-Null
