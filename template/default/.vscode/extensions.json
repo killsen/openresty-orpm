@@ -3,7 +3,6 @@
         "killsen.openresty-vsce",
         "killsen.openresty-nginx-conf",
         "editorconfig.editorconfig",
-        "dwenegar.vscode-luacheck",
-        "tangzx.emmylua"
+        "dwenegar.vscode-luacheck"
     ]
 }

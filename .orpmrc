@@ -1,5 +1,5 @@
 {
-    "version":  "2.3.7",
+    "version":  "2.3.8",
     "license":  "MIT",
     "homepage":  "https://github.com/killsen/openresty-orpm",
     "app_name":  "demo",
