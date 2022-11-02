@@ -8,22 +8,6 @@
         "**/tmp": true,
     },
 
-    "files.associations": {
-        "*.luacheckrc": "lua",
-        "*.lua.api": "lua",
-        ".orpmrc": "json",
-        "*.api": "lua",
-    },
-
-    "json.schemas": [
-        {
-            "url": "https://raw.githubusercontent.com/killsen/openresty-orpm/master/schema.json",
-            "fileMatch": [
-                ".orpmrc"
-            ]
-        }
-    ],
-
     "workbench.tree.indent": 22,
 
     "files.insertFinalNewline": true,
