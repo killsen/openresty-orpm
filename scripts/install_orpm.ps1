@@ -35,7 +35,7 @@ Write-Host "Download File: " -ForegroundColor Yellow -NoNewline
 Write-Host $ZIP_FILE -ForegroundColor Blue
 
 try{
-    Invoke-WebRequest -Uri $ZIP_FILE -OutFile $ARCH_FILE               # 下载文件
+    Invoke-WebRequest -Uri $ZIP_FILE -OutFile $ARCH_FILE
 } catch {
     Write-Host "Download File Fail" -ForegroundColor Red
     Write-Host
@@ -46,7 +46,7 @@ Write-Host "Unzip File: " -ForegroundColor Yellow -NoNewline
 Write-Host $ARCH_FILE -ForegroundColor Blue
 
 try {
-    Expand-Archive -Path $ARCH_FILE -DestinationPath $ORPM_PATH -Force  # 解压文件
+    Expand-Archive -Path $ARCH_FILE -DestinationPath $ORPM_PATH -Force
 } catch {
     Write-Host "Unzip File Fail" -ForegroundColor Red
     Write-Host
