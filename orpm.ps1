@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.4.0"
+$version  = "v2.4.1"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -20,6 +20,7 @@ function show_menu() {
     add_line "homepage" "# $homepage"
 
     add_line
+    add_line "demo" "    # 创建演示项目"
     add_line "create" "  # 创建项目"
     add_line "init" "    # 创建 .orpmrc 配置文件"
     add_line "start" "   # 启动 nginx 服务"
@@ -73,6 +74,10 @@ switch ($args[0]) {
     "create" {
         . $PSScriptRoot\scripts\create.ps1
         create_app $args[1] $args[2]
+    }
+
+    "demo" {
+        . $PSScriptRoot\scripts\create_demo.ps1
     }
 
     "hash" {

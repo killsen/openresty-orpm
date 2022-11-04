@@ -15,6 +15,7 @@
                  "guosiu/lua-resty-date":  "v2.2",
                  "bungle/lua-resty-prettycjson":  "v1.6",
                  "bungle/lua-resty-template":  "v2.0",
+                 "bungle/lua-resty-random":  "master",
                  "bungle/lua-resty-session":  "v3.10",
                  "thibaultcha/lua-resty-mlcache":  "2.6.0",
                  "hamishforbes/lua-resty-iputils":  "v0.3.0",
