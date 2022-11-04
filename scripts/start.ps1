@@ -53,8 +53,10 @@ Write-Host http://127.0.0.1/ -ForegroundColor Blue
 
 $app_name = $conf.app_name
 if ($app_name) {
-    Write-Host http://127.0.0.1/$app_name/help  -ForegroundColor Blue
-    Write-Host http://127.0.0.1/$app_name/_.gen_api_code.lpage -ForegroundColor Blue
+    Write-Host http://127.0.0.1/$app_name/help      -ForegroundColor Blue
+    Write-Host http://127.0.0.1/$app_name/api       -ForegroundColor Blue
+    Write-Host http://127.0.0.1/$app_name/api.d.ts  -ForegroundColor Blue
+    Write-Host http://127.0.0.1/$app_name/api.js    -ForegroundColor Blue
 }
 
 Write-Host ---------------------------------------------
