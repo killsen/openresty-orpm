@@ -13,8 +13,8 @@ function install_openresty() {
         return
     }
 
-    # 关闭 nginx 进程
-    Get-Process -Name "nginx*" | Stop-Process
+    # 关闭 openresty 进程
+    Get-Process -Name "openresty*" | Stop-Process
 
     $ver = $conf.openresty_ver
     if (-not $ver) { $ver = "1.21.4.1" }
@@ -28,6 +28,7 @@ function install_openresty() {
     $openresty          = "$orpm/openresty"
     $openresty_bit      = "openresty-$ver-win$bit"
     $nginx_exe          = "$openresty/$openresty_bit/nginx.exe"
+    $openresty_exe      = "$openresty/$openresty_bit/openresty.exe"
     $lualib_link        = "$openresty/$openresty_bit/lualib"
     $luajit_link        = "$openresty/$openresty_bit/lua/jit"
 
@@ -44,10 +45,15 @@ function install_openresty() {
         }
     }
 
+    # 复制 nginx.exe >> openresty.exe
+    if (-not (Test-Path $openresty_exe)) {
+        Copy-Item -Path $nginx_exe -Destination $openresty_exe | Out-Null
+    }
+
     make_path $root/lua_modules
     make_link $root/lua_modules/lualib      $lualib_link
     make_link $root/lua_modules/lualib/jit  $luajit_link
 
-    return "$openresty/$openresty_bit"
+    return "$openresty/$openresty_bit", $openresty_exe
 
 }

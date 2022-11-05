@@ -21,14 +21,14 @@ if ($root) {
     return
 }
 
-# 关闭 nginx 进程
-Get-Process -Name "nginx*" | Stop-Process
+# 关闭 openresty 进程
+Get-Process -Name "openresty*" | Stop-Process
 
 # 初始化 .rocks 目录
 init_rocks_path
 
 # 安装 openresty
-$openresty = install_openresty
+$openresty, $openresty_exe = install_openresty
 if (-not $openresty) { return }
 
 # 初始化 nginx 目录
@@ -43,10 +43,8 @@ if (-not (Test-Path "$nginx/conf/nginx.conf")) {
     Set-Content "$nginx/conf/nginx.conf" $conf
 }
 
-$nginx_exe = "$openresty/nginx.exe"
-
 Write-Host ---------------------------------------------
-& $nginx_exe -v
+& $openresty_exe -v
 Write-Host ---------------------------------------------
 
 Write-Host http://127.0.0.1/ -ForegroundColor Blue
@@ -65,4 +63,4 @@ Write-Host "conf: $root/nginx/conf/nginx.conf" -ForegroundColor Red
 Write-Host
 
 # 运行 nginx
-Start-Process $nginx_exe -ArgumentList "-p $root/nginx" -NoNewWindow
+Start-Process $openresty_exe -ArgumentList "-p $root/nginx" -NoNewWindow

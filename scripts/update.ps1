@@ -19,8 +19,8 @@ if ($root) {
     return
 }
 
-# 关闭 nginx 进程
-Get-Process -Name "nginx*" | Stop-Process -PassThru
+# 关闭 openresty 进程
+Get-Process -Name "openresty*" | Stop-Process -PassThru
 
 Write-Host
 Write-Host "update libs: " -ForegroundColor Yellow
