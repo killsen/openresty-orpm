@@ -54,6 +54,6 @@ function install_openresty() {
     make_link $root/lua_modules/lualib      $lualib_link
     make_link $root/lua_modules/lualib/jit  $luajit_link
 
-    return "$openresty/$openresty_bit", $openresty_exe
+    return "$openresty/$openresty_bit"
 
 }

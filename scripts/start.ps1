@@ -28,7 +28,7 @@ Get-Process -Name "openresty*" | Stop-Process
 init_rocks_path
 
 # 安装 openresty
-$openresty, $openresty_exe = install_openresty
+$openresty = install_openresty
 if (-not $openresty) { return }
 
 # 初始化 nginx 目录
@@ -42,6 +42,8 @@ if (-not (Test-Path "$nginx/conf/nginx.conf")) {
     $conf = Get-Content "$PSScriptRoot/../template/nginx.conf"
     Set-Content "$nginx/conf/nginx.conf" $conf
 }
+
+$openresty_exe = "$openresty/openresty.exe"
 
 Write-Host ---------------------------------------------
 & $openresty_exe -v

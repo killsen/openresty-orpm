@@ -30,9 +30,9 @@ init_rocks_path
 
 Write-Host
 Write-Host "install openresty: " -ForegroundColor Yellow
-$openresty_win32 = install_openresty
-if (-not $openresty_win32) { return }
-Write-Host $openresty_win32 -ForegroundColor Blue
+$openresty = install_openresty
+if (-not $openresty) { return }
+Write-Host $openresty -ForegroundColor Blue
 
 # Write-Host
 # Write-Host "install mingw: " -ForegroundColor Yellow
