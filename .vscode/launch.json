@@ -9,7 +9,7 @@
             "request": "attach",
             "name": "OpenResty: Attach",
             "pid": 0,
-            "processName": "nginx.exe",
+            "processName": "openresty.exe",
             "captureLog": false
         }
     ]
