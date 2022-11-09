@@ -60,16 +60,13 @@ EOF
 
         s)
             sudo pkill openresty
-
-            sudo openresty -p ~/nginx/ -c ~/nginx/conf/nginx.conf
-            # sudo openresty -p /nginx/ -c /nginx/waf/waf_nginx.conf
+            sudo openresty -p ~/nginx/ -c ~/nginx/conf/nginx-prod.conf
 
             sleep 1
             ps -ef | grep openresty
             ;;
         r)
-            sudo openresty -p ~/nginx/ -c ~/nginx/conf/nginx.conf      -s reload
-            # sudo openresty -p /nginx/ -c /nginx/waf/waf_nginx.conf   -s reload
+            sudo openresty -p ~/nginx/ -c ~/nginx/conf/nginx-prod.conf -s reload
 
             sleep 1
             ps -ef | grep openresty
