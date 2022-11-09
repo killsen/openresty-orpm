@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.4.2"
+$version  = "v2.4.3"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -25,6 +25,7 @@ function show_menu() {
     add_line "init" "    # 创建 .orpmrc 配置文件"
     add_line "start" "   # 启动 nginx 服务"
     add_line "stop" "    # 停止 nginx 服务"
+    add_line "build" "   # 打包 nginx app"
     add_line "update" "  # 升级 orpm"
     add_line "install" " # 安装 libs"
     add_line "rocks" "   # 执行 luarocks"
@@ -47,6 +48,7 @@ switch ($args[0]) {
     "init"    { . $PSScriptRoot\scripts\init.ps1    }
     "start"   { . $PSScriptRoot\scripts\start.ps1   }
     "stop"    { . $PSScriptRoot\scripts\stop.ps1    }
+    "build"   { . $PSScriptRoot\scripts\build.ps1   }
 
     "update"  {
         . $PSScriptRoot\scripts\install_orpm.ps1 $args[1]

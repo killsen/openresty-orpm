@@ -3,5 +3,5 @@ _bk
 lua_modules
 lua_types
 /nginx
-/my-app
+/site
 *.zip
