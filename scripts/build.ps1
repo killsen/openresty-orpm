@@ -52,6 +52,16 @@ $app_ver        = $conf.version
 $app_zip        = "$app_name-$app_ver.zip"
 $luarocks_ver   = $conf.luarocks_ver
 
+if (Test-Path $root/nginx/conf/nginx-prod.conf) {
+    Copy-Item $root/nginx/conf/nginx-prod.conf $temp/nginx/conf/nginx.conf -Force
+    Remove-Item $temp/nginx/conf/nginx-prod.conf -Force -ErrorAction Stop
+}
+
+if (Test-Path $root/nginx/app/$app_name-prod.lua) {
+    Copy-Item $root/nginx/app/$app_name-prod.lua $temp/nginx/app/$app_name.lua -Force
+    Remove-Item $temp/nginx/app/$app_name-prod.lua -Force -ErrorAction Stop
+}
+
 $shell = Get-Content $PSScriptRoot/../orpm.sh -Encoding UTF8 -Raw
 
 $shell = $shell.Replace("[app_name]"     , $app_name     )
