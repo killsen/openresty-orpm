@@ -15,7 +15,6 @@ if (-not $root) {
 $site  = "$root/site"
 $temp  = "$site/temp"
 $nginx = "$site/nginx"
-$zip   = "$site/nginx.zip"
 
 if (Test-Path $temp) {
     Remove-Item -Path $temp -Recurse -Force -ErrorAction Stop
@@ -48,8 +47,23 @@ Copy-Item   $root/nginx/*.lua           $temp/nginx/       -Force
 
 Copy-Item   $nginx/*                    $temp/nginx/       -Force -Recurse
 
-Copy-Item   $PSScriptRoot/../orpm.sh    $site/             -Force -Recurse
+$app_name       = $conf.app_name
+$app_ver        = $conf.version
+$app_zip        = "$app_name-$app_ver.zip"
+$luarocks_ver   = $conf.luarocks_ver
 
-Compress-Archive -Path $temp/* -DestinationPath $zip  -Force
+$shell = Get-Content $PSScriptRoot/../orpm.sh -Encoding UTF8 -Raw
+
+$shell = $shell.Replace("[app_name]"     , $app_name     )
+$shell = $shell.Replace("[app_ver]"      , $app_ver      )
+$shell = $shell.Replace("[luarocks_ver]" , $luarocks_ver )
+
+Set-Content $site/orpm.sh $shell -Encoding UTF8 -Force
+
+Compress-Archive -Path $temp/* -DestinationPath $site/$app_zip  -Force
 
 Start-Process $site
+
+Write-Host "打包完成: " -ForegroundColor Yellow -NoNewline
+Write-Host $app_zip -ForegroundColor Blue
+Write-Host

@@ -4,14 +4,15 @@
 # echo "sh ~/orpm.sh" > /usr/bin/orpm
 # chmod u+x /usr/bin/orpm
 
-app_name="demo"
+app_name="[app_name]"
+app_ver="[app_ver]"
+app_zip="$app_name-$app_ver.zip"
+luarocks_ver="[luarocks_ver]"
 
 mysql_host="127.0.0.1"
 mysql_port="3306"
 mysql_uid="root"
 mysql_psw="12345678"
-nginx_zip="nginx.zip"
-luarocks_ver="3.9.1"
 
 function show_menu () {
 
@@ -19,7 +20,7 @@ function show_menu () {
     cat << EOF
 
     ################################################################
-    项目名称: $app_name
+    项目名称: $app_name v$app_ver
     ################################################################
 
     s) 启动 openresty           1) 安装 openresty
@@ -255,7 +256,7 @@ function install_nginx_app () {
     # rm -rf ~/nginx/       # 删除目录
 
     # 解压文件：指定字符集，解决中文文件名乱码问题
-    unzip -O CP936 -o ~/$nginx_zip -d ~/
+    unzip -O CP936 -o ~/$app_zip -d ~/
 
     # 设置upload目录权限：读r=4, 写w=2, 运行x=1
     # chmod 777 ~/nginx/upload
