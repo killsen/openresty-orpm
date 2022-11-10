@@ -157,6 +157,10 @@ function install_luarocks () {
     sudo yum -y install make
     echo ""
 
+    cd ~
+    rocks_tree=~/.rocks
+    mkdir $rocks_tree
+
     echo "下载并安装 luarocks"
     echo "-----------------------------------------"
     wget https://luarocks.github.io/luarocks/releases/luarocks-$luarocks_ver.tar.gz -O luarocks-$luarocks_ver.tar.gz
@@ -164,12 +168,14 @@ function install_luarocks () {
     cd luarocks-$luarocks_ver
 
     # 配置 luajit 路径
-    ./configure --with-lua="/usr/local/openresty/luajit" \
-                --lua-suffix="jit" \
-                --with-lua-include="/usr/local/openresty/luajit/include/luajit-2.1"
+    ./configure --lua-suffix=jit \
+                --with-lua=/usr/local/openresty/luajit \
+                --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1 \
+                --rocks-tree=$rocks_tree
 
-    make build    # 编译
-    make install  # 安装
+    # 构建并安装
+    make && make install
+    cd ~
 
     echo ""
     echo "#########################################"
@@ -207,11 +213,8 @@ function install_luarocks () {
     echo "-----------------------------------------"
     echo ""
 
-    luarocks_clib_path="luarocks-$luarocks_ver/lua_modules/lib/lua/5.1"
-    luarocks_share_path="luarocks-$luarocks_ver/lua_modules/share/lua/5.1"
-
-    \cp -fr ~/$luarocks_clib_path/*    ~/lua_modules/clib/
-    \cp -fr ~/$luarocks_share_path/*   ~/lua_modules/lua/
+    \cp -fr $rocks_tree/lib/lua/5.1/*     ~/lua_modules/clib/
+    \cp -fr $rocks_tree/share/lua/5.1/*   ~/lua_modules/lua/
 
 }
 
