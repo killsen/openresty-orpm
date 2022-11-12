@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.4.3"
+$version  = "v2.4.4"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
@@ -79,7 +79,7 @@ switch ($args[0]) {
     }
 
     "demo" {
-        . $PSScriptRoot\scripts\create_demo.ps1
+        . $PSScriptRoot\scripts\create_demo.ps1 $args[1]
     }
 
     "hash" {
