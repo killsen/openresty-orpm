@@ -1,8 +1,18 @@
-﻿
-for ($x=1; $x -lt 100; $x=$x+1) {
-    if (-not (Test-Path "orpm-demo-$x")) {
-        $demo = "orpm-demo-$x"
-        break
+﻿param($ProjectName)
+
+# 支持指定项目名称
+if ($ProjectName) {
+    if (-not (Test-Path $ProjectName)) {
+        $demo = $ProjectName
+    } else {
+        Write-Host "已存在同名目录: $ProjectName" -ForegroundColor Red
+    }
+} else {
+    for ($x=1; $x -lt 100; $x=$x+1) {
+        if (-not (Test-Path "orpm-demo-$x")) {
+            $demo = "orpm-demo-$x"
+            break
+        }
     }
 }
 
