@@ -1,5 +1,5 @@
 {
-    "version":  "2.3.8",
+    "version":  "2.4.5",
     "license":  "MIT",
     "homepage":  "https://github.com/killsen/openresty-orpm",
     "app_name":  "demo",
@@ -11,6 +11,7 @@
                  "killsen/openresty-appx":  "master",
                  "killsen/openresty-clib":  "master",
                  "killsen/openresty-lua-types":  "master",
+                 "killsen/lua-resty-ipdb-jit":  "v0.1.2",
                  "lunarmodules/penlight":  "1.13.1",
                  "guosiu/lua-resty-date":  "v2.2",
                  "bungle/lua-resty-prettycjson":  "v1.6",
