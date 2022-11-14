@@ -118,7 +118,13 @@ function Install-GithubLib() {
             make_path $dist_appx
             Copy-Item -Path $temp_appx/* -Destination $dist_appx -Recurse -Force
 
-            if (-not (Test-Path $dist_nginx)) {
+            if (Test-Path $dist_nginx) {
+                $confirm = Read-Host "  ? nginx 目录已经存在, 如果要覆盖请输入 NGINX"
+                if ($confirm -eq "NGINX") {
+                    Write-Host "  + nginx 目录已更新" -ForegroundColor Red
+                    Copy-Item -Path $temp_nginx/* -Destination $dist_nginx -Recurse -Force
+                }
+            } else {
                 make_path $dist_nginx
                 Copy-Item -Path $temp_nginx/* -Destination $dist_nginx -Recurse -Force
             }
