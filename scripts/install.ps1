@@ -4,9 +4,11 @@
 
 # 安装 LuaRocks 库
 function Install-LuaRocksLib() {
-    [Parameter(Position = 0, Mandatory = $true )] [string] $author,
-    [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
-    [Parameter(Position = 2, Mandatory = $false)] [string] $ver,
+    Param (
+        [Parameter(Position = 0, Mandatory = $true )] [string] $author,
+        [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
+        [Parameter(Position = 2, Mandatory = $false)] [string] $ver
+    )
 
     $rocks = install_luarocks
     if (-not $rocks) { return }
@@ -191,7 +193,7 @@ function install( $author_lib_ver, $isdev ) {
 
     if ($author -eq "rocks") {
          # 安装 LuaRocks 库
-        $ver = Install-LuaRocksLib $author, $lib, $ver
+        $ver = Install-LuaRocksLib $author $lib $ver
     } else {
         # 安装 Github 库
         $ver, $lib_conf = Install-GithubLib $author $lib $ver -root $root -orpm $orpm
