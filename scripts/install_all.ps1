@@ -51,27 +51,34 @@ Write-Host "install libs: " -ForegroundColor Yellow
 Write-Host "-------------------------------------------------"
 
 $libs = $conf.libs
+$devs = $conf.devs
 
-if (-not $libs) {
+if (-not $libs.count -and -not $devs.count) {
     Write-Host "no libs installed" -ForegroundColor Blue
 }
 
 # 清空已安装列表
 $Global:INSTLLED = @{}
 
-foreach($item in $libs.PSObject.Properties)
-{
-    $author_lib, $ver = $item.Name, $item.Value
+function _install ($author_lib, $ver, $isdev) {
     $pattern = "([\w-]+)/([\w-]+)"
-
-    if (-not ($author_lib -match $pattern)) { continue }
+    if (-not ($author_lib -match $pattern)) { return }
     $author, $lib = $Matches[1], $Matches[2]
 
-    if ( $author -eq "rocks" ) { continue }
-    if ($ver.IndexOf("#") -ne -1 ) { continue }
+    if ( $author -eq "rocks" ) { return }
+    if ($ver.IndexOf("#") -ne -1 ) { return }
 
-    install "$author_lib@$ver"
+    install "$author_lib@$ver" $isdev
+}
 
+foreach($author_lib in $libs.keys) {
+    $ver = $libs[$author_lib]
+    _install $author_lib $ver
+}
+
+foreach($author_lib in $devs.keys) {
+    $ver = $devs[$author_lib]
+    _install $author_lib $ver "-d"
 }
 
 # 清空已安装列表

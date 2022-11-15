@@ -17,14 +17,31 @@ function get_orpm_path() {
     return ($drive + ".orpm").replace("`\","`/")
 }
 
+# 对象转有序哈希表
+function to_table($obj) {
+    $tbl = [Ordered]@{}
+    if ($obj -and ($obj.GetType().Name -eq "PSCustomObject") ) {
+        foreach($item in $obj.PSObject.Properties) {
+            $tbl[$item.Name] = $item.Value
+        }
+    }
+    return $tbl
+}
+
 # 获取 orpm 配置
 function get_orpm_conf() {
-
     $root = get_root_path
-    if (-not $root) { return }
+    if ($root) {
+        try {
+            $json = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
+        } catch { }
+    }
 
-    Get-Content "$root/.orpmrc" | ConvertFrom-JSON
+    $conf         = to_table($json)
+    $conf["libs"] = to_table($json.libs)
+    $conf["devs"] = to_table($json.devs)
 
+    return $conf
 }
 
 # 取得包的配置信息

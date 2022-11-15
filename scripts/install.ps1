@@ -165,7 +165,7 @@ function Install-GithubLib() {
 # 清空已安装列表
 $Global:INSTLLED = @{}
 
-function install( $author_lib_ver ) {
+function install( $author_lib_ver, $isdev ) {
 
     $root = get_root_path
     $orpm = get_orpm_path
@@ -200,7 +200,7 @@ function install( $author_lib_ver ) {
     if (-not $ver) { return }
 
     $Global:INSTLLED["$author/$lib"] = $true
-    Set-LibVer $author $lib $ver  # 修改版本
+    Set-LibVer $author $lib $ver $isdev # 修改版本
 
     $libs = $lib_conf.libs
     if (-not $libs) { return }
@@ -221,7 +221,7 @@ function install( $author_lib_ver ) {
         if (-not $ver) { return }
 
         $Global:INSTLLED["$author/$lib"] = $true
-        Set-LibVer $author $lib $ver
+        Set-LibVer $author $lib $ver $isdev
     }
 
 }
@@ -247,30 +247,26 @@ function Set-LibVer() {
     Param (
         [Parameter(Position = 0, Mandatory = $true )] [string] $author,
         [Parameter(Position = 1, Mandatory = $true )] [string] $lib,
-        [Parameter(Position = 2, Mandatory = $true )] [string] $ver
+        [Parameter(Position = 2, Mandatory = $true )] [string] $ver,
+        [Parameter(Position = 3, Mandatory = $false)] [string] $isdev
     )
-
-    Start-Sleep -Milliseconds 50  # 延时 50 毫秒, 避免写文件冲突
 
     $root = get_root_path
     if (-not $root) { return }
 
-    $conf = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
-    if (-not $conf) { $conf = @{} }
+    $conf = get_orpm_conf
+    if (-not $conf) { return }
 
     $key = "$author/$lib"
 
-    $old_ver = $conf.libs.($key)
-    if ($old_ver -eq $ver) { return }  # 版本一致退出
-
-    if ( -not $conf.libs ) {
-        $conf | Add-Member "libs" @{ $key = $ver } -Force
+    if ($isdev -eq "-d") {
+        if ($conf.devs[$key] -eq $ver) { return }
+        $conf.devs[$key] = $ver
+        $conf.libs.remove($key)
     } else {
-        try {
-            $conf.libs.($key) = $ver
-        } catch {
-            $conf.libs | Add-Member $key $ver -Force
-        }
+        if ($conf.libs[$key] -eq $ver) { return }
+        $conf.libs[$key] = $ver
+        $conf.devs.remove($key)
     }
 
     $conf | ConvertTo-Json | Set-Content "$root/.orpmrc" | Out-Null

@@ -53,6 +53,14 @@
         }
     },
     "properties": {
+        "name": {
+            "title": "项目名称",
+            "type": "string"
+        },
+        "description": {
+            "title": "项目描述",
+            "type": "string"
+        },
         "homepage": {
             "title": "项目主页",
             "format": "uri",
@@ -99,13 +107,14 @@
             ]
         },
         "libs": {
-            "title": "Lua 模块",
+            "title": "生产环境依赖",
+            "type": "object"
+        },
+        "devs": {
+            "title": "开发环境依赖",
             "type": "object"
         }
     },
-    "required": [
-        "libs"
-    ],
     "title": "OpenResty Package Manifest Schema",
     "type": "object"
 }
