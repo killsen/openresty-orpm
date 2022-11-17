@@ -271,7 +271,7 @@ function Set-LibVer() {
         $conf.devs.remove($key)
     }
 
-    $conf | ConvertTo-Json | Set-Content "$root/.orpmrc" | Out-Null
+    set_orpm_conf($conf)  # 保存 orpm 配置
 
     Start-Sleep -Milliseconds 50  # 延时 50 毫秒, 避免写文件冲突
 }

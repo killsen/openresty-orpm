@@ -28,12 +28,12 @@ function to_table($obj) {
     return $tbl
 }
 
-# 获取 orpm 配置
+# 读取 orpm 配置
 function get_orpm_conf() {
     $root = get_root_path
     if ($root) {
         try {
-            $json = Get-Content "$root/.orpmrc" | ConvertFrom-JSON
+            $json = Get-Content "$root/.orpmrc" -Encoding UTF8 | ConvertFrom-JSON
         } catch { }
     }
 
@@ -43,6 +43,18 @@ function get_orpm_conf() {
 
     return $conf
 }
+
+# 保存 orpm 配置
+function set_orpm_conf($conf) {
+    $root = get_root_path
+    if (-not $root) { return }
+
+    $json = ConvertTo-Json $conf
+    $json = $json.Replace("`r`n", "`n")
+
+    $json | Set-Content "$root/.orpmrc" -Encoding UTF8 | Out-Null
+}
+
 
 # 取得包的配置信息
 function get_lib_conf($path) {
