@@ -207,9 +207,8 @@ function install( $author_lib_ver, $isdev ) {
     $libs = $lib_conf.libs
     if (-not $libs) { return }
 
-    foreach($item in $libs.PSObject.Properties)
-    {
-        $author_lib, $ver = $item.Name, $item.Value
+    foreach($author_lib in $libs.keys) {
+        $ver = $libs[$author_lib]
         $pattern = "([\w-]+)/([\w-]+)"
 
         if (-not ($author_lib -match $pattern)) { continue }

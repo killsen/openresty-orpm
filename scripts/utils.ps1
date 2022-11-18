@@ -61,8 +61,16 @@ function get_lib_conf($path) {
 
     $file = get_child_file $path ".orpmrc"
     if ($file) {
-        Get-Content $file | ConvertFrom-JSON
+        try {
+            $json = Get-Content $file -Encoding UTF8 | ConvertFrom-JSON
+        } catch { }
     }
+
+    $conf         = to_table($json)
+    $conf["libs"] = to_table($json.libs)
+    $conf["devs"] = to_table($json.devs)
+
+    return $conf
 
 }
 
