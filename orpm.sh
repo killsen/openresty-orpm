@@ -147,14 +147,10 @@ function install_luarocks () {
     echo "#########################################"
     echo ""
 
-    echo "安装 gcc 以及其它依赖"
+    echo "安装 gcc make 以及其它依赖"
     echo "-----------------------------------------"
-    sudo yum -y install gcc libtermcap-devel ncurses-devel libevent-devel readline-devel
-    echo ""
-
-    echo "安装 make "
-    echo "-----------------------------------------"
-    sudo yum -y install make
+    sudo yum -y install gcc make unzip git wget curl
+    sudo yum -y install libtermcap-devel ncurses-devel libevent-devel readline-devel
     echo ""
 
     cd ~
@@ -184,28 +180,45 @@ function install_luarocks () {
     echo ""
 
     echo "安装 luafilesystem"
+    echo "https://github.com/lunarmodules/luafilesystem"
     echo "-----------------------------------------"
     luarocks install luafilesystem
     echo ""
 
-    echo "安装 utf8"
+    echo "安装 lua-utf8"
+    echo "https://github.com/starwing/luautf8"
     echo "-----------------------------------------"
-    luarocks install utf8
+    luarocks install luautf8 utf8
     echo ""
 
     echo "安装 hashids"
+    echo "https://github.com/leihog/hashids.lua"
     echo "-----------------------------------------"
     luarocks install hashids
     echo ""
 
     echo "安装 lua-iconv"
+    echo "https://github.com/ittner/lua-iconv"
     echo "-----------------------------------------"
     luarocks install lua-iconv
     echo ""
 
     echo "安装 luasocket"
+    echo "https://github.com/lunarmodules/luasocket"
     echo "-----------------------------------------"
     luarocks install luasocket
+    echo ""
+
+    echo "安装 lua-resty-balancer"
+    echo "https://github.com/api7/lua-resty-balancer"
+    echo "-----------------------------------------"
+    luarocks install lua-resty-balancer
+    echo ""
+
+    echo "安装 lua-resty-radixtree"
+    echo "https://github.com/api7/lua-resty-radixtree"
+    echo "-----------------------------------------"
+    luarocks install lua-resty-radixtree
     echo ""
 
     echo ""
@@ -254,6 +267,8 @@ function install_nginx_app () {
     # sudo pkill openresty  # 结束进程
     # rm -rf ~/lua_modules/ # 删除目录
     # rm -rf ~/nginx/       # 删除目录
+
+    sudo yum -y install unzip
 
     # 解压文件：指定字符集，解决中文文件名乱码问题
     unzip -O CP936 -o ~/$app_zip -d ~/
