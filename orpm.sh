@@ -185,10 +185,10 @@ function install_luarocks () {
     luarocks install luafilesystem
     echo ""
 
-    echo "安装 lua-utf8"
+    echo "安装 luautf8"
     echo "https://github.com/starwing/luautf8"
     echo "-----------------------------------------"
-    luarocks install luautf8 utf8
+    luarocks install luautf8
     echo ""
 
     echo "安装 hashids"
