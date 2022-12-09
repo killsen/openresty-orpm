@@ -240,13 +240,13 @@ function install_mysql () {
     echo ""
 
     # 安装MySQL8.0
-    sudo yum install @mysql
+    sudo yum -y install @mysql
 
     # 开启启动
     sudo systemctl enable --now mysqld
 
     # 要检查MySQL服务器是否正在运行
-    sudo systemctl status mysqld
+    # sudo systemctl status mysqld
 
     # 添加密码及安全设置
     sudo mysql_secure_installation

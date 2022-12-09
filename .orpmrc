@@ -2,7 +2,7 @@
     "name":  "openresty-orpm",
     "description":  "A Very Simple OpenResty Package Manager",
     "homepage":  "https://github.com/killsen/openresty-orpm",
-    "version":  "2.4.8",
+    "version":  "2.4.9",
     "license":  "MIT",
     "app_name":  "demo",
     "openresty_ver":  "1.21.4.1",
