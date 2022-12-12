@@ -226,8 +226,9 @@ function install_luarocks () {
     echo "-----------------------------------------"
     echo ""
 
-    \cp -fr $rocks_tree/lib/lua/5.1/*     ~/lua_modules/clib/
-    \cp -fr $rocks_tree/share/lua/5.1/*   ~/lua_modules/lua/
+    \cp -fr $rocks_tree/share/lua/5.1/*             ~/lua_modules/lua/
+    \cp -fr $rocks_tree/lib/lua/5.1/*               ~/lua_modules/clib/
+    \cp -fr $rocks_tree/lib/lua/5.1/lua-utf8.so     ~/lua_modules/clib/utf8.so
 
 }
 
