@@ -34,7 +34,7 @@ scoop install dev/orpm
 
 ```PowerShell
 
-orpm version  # 版本 v2.4.9
+orpm version  # 版本 v2.5.0
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm demo     # 创建演示项目
