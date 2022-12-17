@@ -44,6 +44,31 @@ function get_orpm_conf() {
     return $conf
 }
 
+# 排除忽略的 libs
+function get_ignored_libs() {
+    $conf = get_orpm_conf
+    $libs = $conf.libs
+    $devs = $conf.devs
+
+    $ignored = @{}
+
+    foreach($author_lib in $libs.keys) {
+        $ver = $libs[$author_lib]
+        if ($ver.IndexOf("#") -ne -1 ) {
+            $ignored[$author_lib] = $true
+        }
+    }
+
+    foreach($author_lib in $devs.keys) {
+        $ver = $devs[$author_lib]
+        if ($ver.IndexOf("#") -ne -1 ) {
+            $ignored[$author_lib] = $true
+        }
+    }
+
+    return $ignored
+}
+
 # 保存 orpm 配置
 function set_orpm_conf($conf) {
     $root = get_root_path

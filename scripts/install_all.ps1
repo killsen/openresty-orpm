@@ -57,8 +57,8 @@ if (-not $libs.count -and -not $devs.count) {
     Write-Host "no libs installed" -ForegroundColor Blue
 }
 
-# 清空已安装列表
-$Global:INSTLLED = @{}
+# 排除忽略的 libs
+$Global:INSTLLED = get_ignored_libs
 
 function _install ($author_lib, $ver, $isdev) {
     $pattern = "([\w-]+)/([\w-]+)"
@@ -81,8 +81,8 @@ foreach($author_lib in $devs.keys) {
     _install $author_lib $ver "-d"
 }
 
-# 清空已安装列表
-$Global:INSTLLED = @{}
+# 排除忽略的 libs
+$Global:INSTLLED = get_ignored_libs
 
 Write-Host "-------------------------------------------------"
 Write-Host

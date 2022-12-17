@@ -164,8 +164,8 @@ function Install-GithubLib() {
 
 }
 
-# 清空已安装列表
-$Global:INSTLLED = @{}
+# 排除忽略的 libs
+$Global:INSTLLED = get_ignored_libs
 
 function install( $author_lib_ver, $isdev ) {
 
