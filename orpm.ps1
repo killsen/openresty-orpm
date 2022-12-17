@@ -1,5 +1,5 @@
 ﻿
-$version  = "v2.5.0"
+$version  = "v2.5.1"
 $homepage = "https://github.com/killsen/openresty-orpm"
 
 function add_line($p1, $p2) {
