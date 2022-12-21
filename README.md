@@ -2,7 +2,7 @@
 
 A Very Simple [OpenResty](https://openresty.org) Package Manager
 
-## 通过 PowerShell 直接安装 orpm
+## 通过 PowerShell 安装 orpm
 
 Open a PowerShell terminal (version 5.1 or later) and run:
 
@@ -12,21 +12,6 @@ Open a PowerShell terminal (version 5.1 or later) and run:
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 irm https://raw.githubusercontent.com/killsen/openresty-orpm/main/scripts/install_orpm.ps1 | iex
-
-```
-
-## 通过 [scoop](https://scoop.sh/) 安装 orpm
-
-```PowerShell
-
-# 添加 dev 仓库
-scoop bucket add dev https://github.com/killsen/scoop-dev
-
-# 更新 scoop
-scoop update
-
-# 通过 scoop 安装 orpm
-scoop install dev/orpm
 
 ```
 
