@@ -16,7 +16,6 @@ _t.lua
 /docker/dist
 
 *.zip
-*.json
 *.csv
 
 # **/conf/cert/domains.json
