@@ -19,7 +19,7 @@ irm https://raw.githubusercontent.com/killsen/openresty-orpm/main/scripts/instal
 
 ```PowerShell
 
-orpm version  # 版本 v2.5.1
+orpm version  # 版本 v2.6.0
 orpm homepage # https://github.com/killsen/openresty-orpm
 
 orpm demo     # 创建演示项目

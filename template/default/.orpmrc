@@ -8,6 +8,9 @@
     "mingw_ver":  "12.2.0",
     "arch":  "64bit",
     "libs":  {
-                 "killsen/openresty-appx":  "master"
+                 "killsen/openresty-appx":  "v2.1.0"
+             },
+    "devs":  {
+                 "killsen/openresty-lua-types":  "v2.0.2"
              }
 }

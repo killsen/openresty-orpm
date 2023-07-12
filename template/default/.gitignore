@@ -1,8 +1,26 @@
-.rocks
-lua_modules
-lua_types
-nginx/temp
-nginx/logs
-site/temp
-site/orpm.sh
+_bk
+_t.lua
+
+/.rocks
+/lua_modules
+/lua_types
+
+/nginx/temp
+/nginx/logs
+/nginx/testing
+/nginx/app/demo*
+
+/site/temp
+/site/orpm.sh
+
+/docker/dist
+
 *.zip
+*.json
+*.csv
+
+# **/conf/cert/domains.json
+# **/conf/cert/*-acc.pem
+# **/conf/cert/*-key.pem
+# **/conf/cert/*-crt.pem
+**/conf/cert/*-tmp.pem

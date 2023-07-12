@@ -25,13 +25,18 @@ ignore = {
 -- 全局变量
 globals = {
     'ngx', 'ndk', '_load',
-    'io.openx', 'openx', 'dofilex'
+    'io.openx', 'openx', 'dofilex',
+    'table.pack', 'table.unpack', 'table.nkeys',
+    'table.clone',
 }
 
 -- 不检查的目录及文件
 exclude_files = {
     '.luacheckrc',
     '.rocks',
-    'lua_modules',
+    'lua_modules/clib',
+    'lua_modules/lua',
+    'lua_modules/lualib',
+    'lua_modules/resty',
     'lua_types',
 }
