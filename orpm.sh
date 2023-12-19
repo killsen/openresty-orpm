@@ -149,7 +149,7 @@ function install_luarocks () {
 
     echo "安装 gcc make 以及其它依赖"
     echo "-----------------------------------------"
-    sudo yum -y install gcc make unzip git wget curl
+    sudo yum -y install gcc make unzip git wget curl lz4-devel
     sudo yum -y install libtermcap-devel ncurses-devel libevent-devel readline-devel
     echo ""
 
@@ -219,6 +219,12 @@ function install_luarocks () {
     echo "https://github.com/api7/lua-resty-radixtree"
     echo "-----------------------------------------"
     luarocks install lua-resty-radixtree
+    echo ""
+
+    echo "安装 lua-protobuf"
+    echo "https://github.com/starwing/lua-protobuf"
+    echo "-----------------------------------------"
+    luarocks install lua-protobuf
     echo ""
 
     echo ""
