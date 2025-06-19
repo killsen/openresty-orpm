@@ -27,6 +27,7 @@ function show_menu () {
     r) 重启 openresty           2) 安装 nginx_app
     q) 停止 openresty           3) 安装 luarocks clib
                                 4) 安装 mysql
+                                5) 安装 redis
 
     11) access日志      12) error日志
     21) 访问首页        22) 压力测试
@@ -46,6 +47,7 @@ EOF
         2) install_nginx_app        ;;
         3) install_luarocks         ;;
         4) install_mysql            ;;
+        5) install_redis            ;;
 
         11) tail -f ~/nginx/logs/access.log  ;;
         12) tail -f ~/nginx/logs/error.log   ;;
@@ -260,6 +262,31 @@ function install_mysql () {
 
     # 下载并安装 mysql 客户端
     # sudo yum -y install mysql.x86_64
+
+}
+
+function install_redis () {
+
+    echo ""
+    echo "#########################################"
+    echo "##### 下载并安装 redis              #####"
+    echo "#########################################"
+    echo ""
+
+    # 启用 EPEL 仓库
+    sudo yum install epel-release -y
+
+    # 安装 Redis
+    sudo yum install redis -y
+
+    # 设置 Redis 为系统服务并开机自启, --now 同时 start 启动服务
+    sudo systemctl enable --now redis
+
+    # 检查运行状态
+    # sudo systemctl status redis
+
+    # 验证是否正常工作
+    # redis-cli ping
 
 }
 
